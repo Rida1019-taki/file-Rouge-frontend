@@ -1,6 +1,10 @@
 import * as yup from 'yup'
 
 export const voitureSchema = yup.object({
+  listingType: yup
+    .string()
+    .oneOf(['SALE', 'RENTAL'], 'Type d\'annonce invalide')
+    .required("Le type d'annonce est obligatoire"),
   marque: yup.string().required('La marque est obligatoire'),
   modele: yup.string().required('Le modèle est obligatoire'),
   annee: yup
@@ -12,8 +16,21 @@ export const voitureSchema = yup.object({
   prixParJour: yup
     .number()
     .typeError('Le prix doit être un nombre')
-    .required('Le prix journalier est obligatoire')
-    .positive('Le prix doit être positif'),
+    .positive('Le prix doit être positif')
+    .when('listingType', {
+      is: 'RENTAL',
+      then: (schema) => schema.required('Le prix journalier est obligatoire'),
+      otherwise: (schema) => schema.nullable()
+    }),
+  prixVente: yup
+    .number()
+    .typeError('Le prix doit être un nombre')
+    .positive('Le prix doit être positif')
+    .when('listingType', {
+      is: 'SALE',
+      then: (schema) => schema.required('Le prix de vente est obligatoire'),
+      otherwise: (schema) => schema.nullable()
+    }),
   categorieId: yup
     .number()
     .typeError('Catégorie obligatoire')

@@ -15,7 +15,11 @@ const reservationService = {
     return response.data
   },
   updateStatus: async (id, statut) => {
-    const response = await api.put(ENDPOINTS.reservations.status(id), { statut })
+    const response = await api.patch(ENDPOINTS.reservations.status(id, statut))
+    return response.data
+  },
+  cancel: async (id) => {
+    const response = await api.patch(ENDPOINTS.reservations.cancel(id))
     return response.data
   }
 }

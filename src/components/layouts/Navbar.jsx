@@ -32,8 +32,17 @@ export default function Navbar() {
           <NavLink to="/" className={linkClass} end>
             Accueil
           </NavLink>
-          <a href="/#catalog" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg transition">
-            Nos voitures
+          <NavLink to="/vente" className={linkClass}>
+            Vendre
+          </NavLink>
+          <NavLink to="/location" className={linkClass}>
+            Louer
+          </NavLink>
+          <a href="/#a-propos" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg transition">
+            À propos
+          </a>
+          <a href="/#contact" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg transition">
+            Contact
           </a>
           {user && user.role === 'CLIENT' && (
             <NavLink to="/client/mes-reservations" className={linkClass}>

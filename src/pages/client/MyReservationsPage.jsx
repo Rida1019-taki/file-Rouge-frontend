@@ -17,7 +17,7 @@ export default function MyReservationsPage() {
   const handleCancel = async (reservation) => {
     setBusyId(reservation.id)
     try {
-      await reservationService.updateStatus(reservation.id, 'ANNULEE')
+      await reservationService.cancel(reservation.id)
       show('Réservation annulée')
       reload()
     } catch (err) {

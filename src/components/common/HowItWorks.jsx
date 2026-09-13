@@ -2,17 +2,17 @@ const STEPS = [
   {
     number: '1',
     title: 'Cherchez votre voiture',
-    description: 'Choisissez une ville, un modèle et comparez les prix en quelques clics.'
+    description: 'Parcourez les annonces de vente et de location : ville, modèle, prix et disponibilité.'
   },
   {
     number: '2',
-    title: 'Réservez en ligne',
-    description: 'Sélectionnez vos dates et confirmez votre réservation en toute sécurité.'
+    title: 'Achetez ou réservez',
+    description: 'Contactez le vendeur pour un achat ou réservez votre location en quelques clics.'
   },
   {
     number: '3',
     title: 'Prenez la route',
-    description: 'Récupérez la voiture et profitez de votre trajet partout au Maroc.'
+    description: 'Récupérez votre voiture et profitez de votre achat ou de votre trajet partout au Maroc.'
   }
 ]
 
@@ -24,7 +24,7 @@ export default function HowItWorks() {
           Comment ça marche ?
         </h2>
         <p className="mx-auto mt-3 max-w-2xl text-center text-gray-500">
-          Louez une voiture en 3 étapes simples, rapidement et en toute confiance.
+          Achetez ou louez une voiture en 3 étapes simples, rapidement et en toute confiance.
         </p>
 
         <div className="mt-12 grid gap-8 md:grid-cols-3">

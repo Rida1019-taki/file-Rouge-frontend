@@ -14,7 +14,8 @@ export default function PublicLayout() {
             Tomo<span className="text-primary-600">bility</span>.ma
           </span>
           <p className="text-sm text-gray-500">
-            Location de voitures partout au Maroc — Casablanca, Rabat, Marrakech, Tanger et plus.
+            Achat et location de voitures partout au Maroc — Casablanca, Rabat,
+            Marrakech, Tanger et plus.
           </p>
           <p className="text-xs text-gray-400">
             © {new Date().getFullYear()} Tomobilty.ma. Tous droits réservés.

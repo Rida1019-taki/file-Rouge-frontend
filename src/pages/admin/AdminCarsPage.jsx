@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import voitureService from '../../services/voitureService'
 import useList from '../../hooks/useList'
 import Button from '../../components/ui/Button'
@@ -18,8 +17,8 @@ const TABS = [
   { value: 'RENTAL', label: 'Location' }
 ]
 
-export default function OwnerCarsPage() {
-  const { data: voitures, loading, reload } = useList(voitureService.getMine)
+export default function AdminCarsPage() {
+  const { data: voitures, loading, reload } = useList(voitureService.getAll)
   const { toast, show, hide } = useToast()
   const [tab, setTab] = useState('')
 
@@ -34,23 +33,15 @@ export default function OwnerCarsPage() {
       await voitureService.delete(voiture.id)
       show('Voiture supprimée')
       reload()
-    } catch {
-      show("Impossible de supprimer cette voiture", 'error')
+    } catch (err) {
+      show(err?.response?.status === 403 ? 'Action réservée au propriétaire de l\'annonce' : 'Impossible de supprimer cette voiture', 'error')
     }
   }
 
   return (
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-gray-900">Mes annonces</h1>
-        <Link to="/owner/voitures/nouvelle">
-          <Button>
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-            </svg>
-            Ajouter une voiture
-          </Button>
-        </Link>
+        <h1 className="text-3xl font-bold text-gray-900">Gestion des voitures</h1>
       </div>
 
       <div className="mb-6 flex flex-wrap gap-2">
@@ -69,7 +60,7 @@ export default function OwnerCarsPage() {
       </div>
 
       {loading ? (
-        <Spinner label="Chargement de vos voitures..." />
+        <Spinner label="Chargement des voitures..." />
       ) : filtered.length ? (
         <div className="space-y-3">
           {filtered.map((voiture) => {
@@ -110,9 +101,6 @@ export default function OwnerCarsPage() {
                 </div>
 
                 <div className="flex shrink-0 flex-wrap gap-2">
-                  <Link to={`/owner/voitures/${voiture.id}/modifier`}>
-                    <Button variant="outline">Modifier</Button>
-                  </Link>
                   <Button variant="danger" onClick={() => handleDelete(voiture)}>
                     Supprimer
                   </Button>
@@ -122,11 +110,7 @@ export default function OwnerCarsPage() {
           })}
         </div>
       ) : (
-        <EmptyState message="Vous n'avez pas encore ajouté de voiture.">
-          <Link to="/owner/voitures/nouvelle">
-            <Button>Ajouter une voiture</Button>
-          </Link>
-        </EmptyState>
+        <EmptyState message="Aucune voiture ne correspond à ce filtre." />
       )}
 
       <Toast toast={toast} onClose={hide} />

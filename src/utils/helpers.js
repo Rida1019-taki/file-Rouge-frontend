@@ -1,5 +1,23 @@
 const DEFAULT_COLOR = 'bg-gray-100 text-gray-700'
 
+export const LISTING_LABELS = {
+  SALE: 'À vendre',
+  RENTAL: 'À louer'
+}
+
+export const LISTING_COLORS = {
+  SALE: 'bg-amber-100 text-amber-800',
+  RENTAL: 'bg-blue-100 text-blue-800'
+}
+
+export function listingLabel(type) {
+  return LISTING_LABELS[type] || (type === 'SALE' ? 'À vendre' : type === 'RENTAL' ? 'À louer' : '')
+}
+
+export function listingColor(type) {
+  return LISTING_COLORS[type] || 'bg-gray-100 text-gray-700'
+}
+
 export const STATUT_COLORS = {
   EN_ATTENTE: 'bg-yellow-100 text-yellow-800',
   CONFIRMEE: 'bg-green-100 text-green-800',

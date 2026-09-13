@@ -5,6 +5,8 @@ import DashboardLayout from './components/layouts/DashboardLayout'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import GuestRoute from './components/auth/GuestRoute'
 import HomePage from './pages/HomePage'
+import SalesPage from './pages/SalesPage'
+import RentalPage from './pages/RentalPage'
 import CarDetailPage from './pages/CarDetailPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
@@ -14,6 +16,7 @@ import OwnerCarsPage from './pages/owner/OwnerCarsPage'
 import CarFormPage from './pages/owner/CarFormPage'
 import OwnerReservationsPage from './pages/owner/OwnerReservationsPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
+import AdminCarsPage from './pages/admin/AdminCarsPage'
 
 export default function App() {
   return (
@@ -25,6 +28,8 @@ export default function App() {
 
       <Route element={<PublicLayout />}>
         <Route path="/" element={<HomePage />} />
+        <Route path="/vente" element={<SalesPage />} />
+        <Route path="/location" element={<RentalPage />} />
         <Route path="/voitures/:id" element={<CarDetailPage />} />
       </Route>
 
@@ -44,7 +49,7 @@ export default function App() {
       <Route element={<ProtectedRoute roles={[ROLES.ADMIN]} />}>
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
-          <Route path="/admin/voitures" element={<OwnerCarsPage />} />
+          <Route path="/admin/voitures" element={<AdminCarsPage />} />
         </Route>
       </Route>
 

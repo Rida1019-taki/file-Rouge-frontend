@@ -6,6 +6,10 @@ const voitureService = {
     const response = await api.get(ENDPOINTS.voitures.list)
     return response.data
   },
+  getByType: async (type) => {
+    const response = await api.get(ENDPOINTS.voitures.byType(type))
+    return response.data
+  },
   getById: async (id) => {
     const response = await api.get(ENDPOINTS.voitures.byId(id))
     return response.data

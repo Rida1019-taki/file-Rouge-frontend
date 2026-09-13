@@ -8,7 +8,7 @@ const TRANSMISSIONS = [
   { value: 'AUTOMATIQUE', label: 'Automatique' }
 ]
 
-export default function CarFilter({ filters, onChange }) {
+export default function CarFilter({ filters, onChange, priceLabel = 'Prix max (DH)' }) {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -68,7 +68,7 @@ export default function CarFilter({ filters, onChange }) {
         </div>
 
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Prix max / jour</label>
+          <label className="mb-1 block text-sm font-medium text-gray-700">{priceLabel}</label>
           <input
             type="number"
             min="0"

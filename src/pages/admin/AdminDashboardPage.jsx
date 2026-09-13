@@ -34,15 +34,28 @@ export default function AdminDashboardPage() {
       <h1 className="mb-6 text-3xl font-bold text-gray-900">Dashboard Administrateur</h1>
 
       <div className="mb-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <StatsCard title="Voitures" value={stats.voituresCount ?? stats.totalVoitures ?? 0} icon="voitures" />
+        <StatsCard title="Voitures" value={stats.voituresCount ?? stats.totalVoitures ?? stats.cars ?? 0} icon="voitures" />
         <StatsCard title="Réservations" value={stats.reservationsCount ?? stats.totalReservations ?? 0} icon="reservations" />
-        <StatsCard title="Utilisateurs" value={stats.usersCount ?? stats.totalUsers ?? 0} icon="clients" />
+        <StatsCard title="Utilisateurs" value={stats.usersCount ?? stats.totalUsers ?? stats.users ?? 0} icon="clients" />
         <StatsCard
           title="Revenu total"
           value={formatMontant(stats.revenue ?? stats.totalRevenu ?? 0)}
           icon="revenus"
           hint="Chiffre d'affaires global"
         />
+      </div>
+
+      <div className="mb-8 grid gap-6 sm:grid-cols-2">
+        <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">Annonces de vente</h2>
+          <p className="text-3xl font-bold text-amber-600">{stats.carsSale ?? 0}</p>
+          <p className="mt-1 text-xs text-gray-400">Voitures destinées à la vente</p>
+        </div>
+        <div className="rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">Annonces de location</h2>
+          <p className="text-3xl font-bold text-primary-600">{stats.carsRental ?? 0}</p>
+          <p className="mt-1 text-xs text-gray-400">Voitures destinées à la location</p>
+        </div>
       </div>
 
       {stats.reservationsByMonth && Array.isArray(stats.reservationsByMonth) && stats.reservationsByMonth.length > 0 && (

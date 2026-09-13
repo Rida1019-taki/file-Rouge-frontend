@@ -5,6 +5,7 @@ export const ENDPOINTS = {
   },
   voitures: {
     list: '/voitures',
+    byType: (type) => `/voitures?listingType=${type}`,
     byId: (id) => `/voitures/${id}`,
     mine: '/voitures/mine'
   },
@@ -12,7 +13,8 @@ export const ENDPOINTS = {
     create: '/reservations',
     my: '/reservations/my',
     owner: '/reservations/owner',
-    status: (id) => `/reservations/${id}/statut`
+    status: (id, statut) => `/reservations/${id}/status/${statut}`,
+    cancel: (id) => `/reservations/${id}/annuler`
   },
   categories: {
     list: '/categories',

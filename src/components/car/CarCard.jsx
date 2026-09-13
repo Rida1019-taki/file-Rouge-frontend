@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
-import { formatPrix } from '../../utils/format'
+import { formatPrix, formatMontant } from '../../utils/format'
 import { getCarImage } from '../../utils/carImage'
-import StatusBadge from '../reservation/StatusBadge'
+import ListingBadge from './ListingBadge'
 
 export default function CarCard({ voiture }) {
   const image = getCarImage(voiture)
+  const isSale = voiture.listingType === 'SALE'
+  const price = isSale ? formatMontant(voiture.prixVente) : formatPrix(voiture.prixParJour)
+  const actionLabel = isSale ? 'Voir détails' : 'Voir détails'
 
   return (
     <Link
@@ -25,11 +28,9 @@ export default function CarCard({ voiture }) {
             </svg>
           </div>
         )}
-        {voiture.statut && (
-          <div className="absolute right-3 top-3">
-            <StatusBadge statut={voiture.statut} />
-          </div>
-        )}
+        <div className="absolute right-3 top-3">
+          <ListingBadge listingType={voiture.listingType} />
+        </div>
         <span className="absolute left-3 top-3 rounded-lg bg-black/60 px-2 py-1 text-xs font-semibold text-white backdrop-blur">
           {voiture.annee}
         </span>
@@ -52,9 +53,9 @@ export default function CarCard({ voiture }) {
         </div>
 
         <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3">
-          <span className="text-sm font-bold text-primary-600">{formatPrix(voiture.prixParJour)}</span>
+          <span className="text-sm font-bold text-primary-600">{price}</span>
           <span className="text-xs font-medium text-gray-400 group-hover:text-primary-600 transition">
-            Voir détails →
+            {actionLabel} →
           </span>
         </div>
       </div>

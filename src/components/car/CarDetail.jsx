@@ -1,8 +1,9 @@
-import { formatPrix } from '../../utils/format'
+import { formatPrix, formatMontant } from '../../utils/format'
 import { capitalize } from '../../utils/helpers'
 import ImageGallery from './ImageGallery'
 import ReservationForm from '../reservation/ReservationForm'
 import StatusBadge from '../reservation/StatusBadge'
+import ListingBadge from './ListingBadge'
 
 const SPECS = [
   { key: 'annee', label: 'Année', icon: 'calendar' },
@@ -26,9 +27,16 @@ const ICONS = {
   )
 }
 
+const CONTACT_MAIL = 'contact@tomobilty.ma'
+
 export default function CarDetail({ voiture }) {
   const categorie = voiture.categorie?.nom || voiture.categorieName
   const ville = voiture.ville?.nom || voiture.ville
+  const isSale = voiture.listingType === 'SALE'
+
+  const contactHref = `mailto:${CONTACT_MAIL}?subject=${encodeURIComponent(
+    `Demande d'information - ${voiture.marque} ${voiture.modele}`
+  )}`
 
   return (
     <div className="grid gap-8 lg:grid-cols-3">
@@ -37,6 +45,7 @@ export default function CarDetail({ voiture }) {
           <h1 className="text-3xl font-bold text-gray-900">
             {voiture.marque} {voiture.modele}
           </h1>
+          <ListingBadge listingType={voiture.listingType} />
           {voiture.statut && <StatusBadge statut={voiture.statut} />}
         </div>
         <p className="mb-6 flex items-center gap-1.5 text-gray-500">
@@ -77,11 +86,26 @@ export default function CarDetail({ voiture }) {
 
       <div>
         <div className="sticky top-24 rounded-xl bg-white p-6 shadow-sm ring-1 ring-gray-200">
-          <p className="text-sm text-gray-500">À partir de</p>
-          <p className="mb-1 text-3xl font-bold text-primary-600">{formatPrix(voiture.prixParJour)}</p>
-          <p className="mb-6 text-xs text-gray-400">Hors assurance et carburant</p>
+          {isSale ? (
+            <>
+              <p className="text-sm text-gray-500">Prix de vente</p>
+              <p className="mb-6 mt-1 text-3xl font-bold text-primary-600">{formatMontant(voiture.prixVente)}</p>
+              <a
+                href={contactHref}
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-700"
+              >
+                Contacter le vendeur
+              </a>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-gray-500">À partir de</p>
+              <p className="mb-1 text-3xl font-bold text-primary-600">{formatPrix(voiture.prixParJour)}</p>
+              <p className="mb-6 text-xs text-gray-400">Hors assurance et carburant</p>
 
-          <ReservationForm voiture={voiture} />
+              <ReservationForm voiture={voiture} />
+            </>
+          )}
         </div>
       </div>
     </div>
