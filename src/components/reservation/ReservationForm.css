@@ -1,0 +1,59 @@
+.res-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.res-form .form-field {
+  margin-bottom: 14px;
+}
+
+.res-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+}
+
+.res-summary__label {
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.res-summary__value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.res-form__error {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 13px;
+}
+
+.res-success {
+  padding: 16px;
+  border: 1px solid var(--success);
+  border-radius: var(--radius-sm);
+  background: var(--success-bg);
+  color: var(--success);
+  font-size: 14px;
+}
+
+.res-success p:first-child {
+  font-weight: 600;
+}
+
+.res-success__text {
+  margin-top: 4px;
+}
+
+.res-success .btn {
+  margin-top: 12px;
+}

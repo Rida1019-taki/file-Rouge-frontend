@@ -10,6 +10,7 @@ import { formatPrix, formatMontant } from '../../utils/format'
 import { getCarImage } from '../../utils/carImage'
 import useToast from '../../hooks/useToast'
 import Toast from '../../components/ui/Toast'
+import './admin-pages.css'
 
 const TABS = [
   { value: '', label: 'Toutes' },
@@ -40,19 +41,17 @@ export default function AdminCarsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-3xl font-bold text-gray-900">Gestion des voitures</h1>
+      <div className="dash-header">
+        <h1 className="page-title">Gestion des voitures</h1>
       </div>
 
-      <div className="mb-6 flex flex-wrap gap-2">
+      <div className="tabs">
         {TABS.map((t) => (
           <button
             key={t.value}
             type="button"
             onClick={() => setTab(t.value)}
-            className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
-              tab === t.value ? 'bg-primary-600 text-white' : 'bg-white text-gray-700 ring-1 ring-gray-200 hover:bg-gray-50'
-            }`}
+            className={`tab-btn${tab === t.value ? ' tab-btn--active' : ''}`}
           >
             {t.label}
           </button>
@@ -62,7 +61,7 @@ export default function AdminCarsPage() {
       {loading ? (
         <Spinner label="Chargement des voitures..." />
       ) : filtered.length ? (
-        <div className="space-y-3">
+        <div className="car-rows">
           {filtered.map((voiture) => {
             const image = getCarImage(voiture)
             const isSale = voiture.listingType === 'SALE'
@@ -70,37 +69,37 @@ export default function AdminCarsPage() {
             return (
               <div
                 key={voiture.id}
-                className="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:flex-row sm:items-center"
+                className="car-row"
               >
-                <div className="h-20 w-full shrink-0 overflow-hidden rounded-lg bg-gray-100 sm:w-32">
+                <div className="car-row__image">
                   {image ? (
-                    <img src={image} alt="" className="h-full w-full object-cover" />
+                    <img src={image} alt="" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-300">
-                      <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                    <div className="car-row__placeholder">
+                      <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                       </svg>
                     </div>
                   )}
                 </div>
 
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="font-semibold text-gray-900">
+                <div className="car-row__body">
+                  <div className="car-row__title-row">
+                    <h3 className="car-row__title">
                       {voiture.marque} {voiture.modele}
                     </h3>
                     <ListingBadge listingType={voiture.listingType} />
                     {voiture.statut && <StatusBadge statut={voiture.statut} />}
                   </div>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="car-row__meta">
                     {voiture.annee} • {price}
                   </p>
-                  <p className="mt-0.5 text-xs text-gray-400">
+                  <p className="car-row__city">
                     {voiture.ville?.nom || voiture.ville}
                   </p>
                 </div>
 
-                <div className="flex shrink-0 flex-wrap gap-2">
+                <div className="car-row__actions">
                   <Button variant="danger" onClick={() => handleDelete(voiture)}>
                     Supprimer
                   </Button>

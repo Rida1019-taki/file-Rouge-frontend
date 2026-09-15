@@ -2,13 +2,14 @@ import { Navigate, Outlet } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import Spinner from '../ui/Spinner'
 import { ROLES } from '../../config/roles'
+import './auth.css'
 
 export default function GuestRoute() {
   const { user, loading } = useAuth()
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="auth-loader">
         <Spinner label="Chargement..." />
       </div>
     )

@@ -1,0 +1,64 @@
+:root {
+  /* Couleurs principales */
+  --primary: #143a6e;
+  --primary-dark: #0e2b50;
+  --primary-soft: #e7eef7;
+
+  --accent: #2563eb;
+  --accent-dark: #1d4ed8;
+  --accent-soft: #eaf1ff;
+
+  /* Surfaces */
+  --background: #f5f7fb;
+  --surface: #ffffff;
+  --surface-muted: #f8fafd;
+  --filter-bg: #f8fafc;
+
+  /* Fond hero & footer (navy profond, uni) */
+  --hero-bg: #10315e;
+  --footer-bg: #0b2547;
+
+  /* Texte */
+  --text: #131f33;
+  --text-muted: #5c6b80;
+  --text-faint: #8b9bb0;
+  --text-on-dark: #d6e2f3;
+
+  /* Bordures */
+  --border: #eef1f6;
+  --border-strong: #c6d0dd;
+
+  /* États */
+  --success: #1f7a43;
+  --success-bg: #eaf6ee;
+  --danger: #c0392b;
+  --danger-bg: #fcefef;
+  --warning: #a16207;
+  --warning-bg: #faf3e2;
+
+  /* Types d'annonce */
+  --sale: #a16207;
+  --sale-bg: #faf3e2;
+  --rental: #2563eb;
+  --rental-bg: #eaf1ff;
+
+  /* Rayons */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Ombres */
+  --shadow-sm: 0 1px 2px rgba(15, 30, 55, 0.05);
+  --shadow-md: 0 4px 14px rgba(15, 30, 55, 0.08);
+  --shadow-lg: 0 12px 32px rgba(15, 30, 55, 0.12);
+  --shadow-hover: 0 8px 30px rgba(15, 30, 55, 0.08);
+  --shadow-soft: 0 2px 12px rgba(15, 30, 55, 0.04);
+
+  /* Typographie */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Layout */
+  --header-height: 72px;
+  --sidebar-width: 250px;
+  --container-max: 1220px;
+}

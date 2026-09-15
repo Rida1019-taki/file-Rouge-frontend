@@ -1,0 +1,33 @@
+.spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 34px 0;
+}
+
+.spinner--inline {
+  padding: 12px 0;
+}
+
+.spinner__icon {
+  width: 36px;
+  height: 36px;
+  color: var(--accent);
+  animation: spinner-rotate 0.8s linear infinite;
+}
+
+.spinner__icon circle {
+  opacity: 0.2;
+}
+
+.spinner__icon path {
+  opacity: 0.8;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}

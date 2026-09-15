@@ -1,0 +1,40 @@
+.dash-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-title--spaced {
+  margin-bottom: 24px;
+}
+
+.form-sheet {
+  max-width: 760px;
+  margin-inline: auto;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.owner-loading {
+  padding: 24px 0;
+}
+
+.form-alert-error {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.owner-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

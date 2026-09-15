@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import { ROLES } from './config/roles'
 import PublicLayout from './components/layouts/PublicLayout'
 import DashboardLayout from './components/layouts/DashboardLayout'
@@ -18,9 +19,22 @@ import OwnerReservationsPage from './pages/owner/OwnerReservationsPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import AdminCarsPage from './pages/admin/AdminCarsPage'
 
+function ScrollToTop() {
+  const { pathname, hash, state } = useLocation()
+
+  useEffect(() => {
+    if (hash || state?.scrollTo) return
+    window.scrollTo(0, 0)
+  }, [pathname, hash, state])
+
+  return null
+}
+
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route element={<GuestRoute />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
@@ -54,6 +68,7 @@ export default function App() {
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+      </Routes>
+    </>
   )
 }

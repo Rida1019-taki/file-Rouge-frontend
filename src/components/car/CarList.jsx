@@ -12,13 +12,13 @@ export default function CarList({ voitures = [], loading = false, columns = 3 })
   }
 
   const gridCols = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-1 sm:grid-cols-2',
-    3: 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+    1: 'grid grid-cols-1',
+    2: 'grid grid-cols-2',
+    3: 'grid grid-cols-3'
   }
 
   return (
-    <div className={`grid ${gridCols[columns] || gridCols[3]} gap-5`}>
+    <div className={gridCols[columns] || gridCols[3]}>
       {voitures.map((voiture) => (
         <CarCard key={voiture.id} voiture={voiture} />
       ))}

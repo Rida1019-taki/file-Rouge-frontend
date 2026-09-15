@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import categorieService from '../../services/categorieService'
 import Button from '../ui/Button'
 import Spinner from '../ui/Spinner'
+import useCategories from '../../hooks/useCategories'
+import './CarFilter.css'
 
 const TRANSMISSIONS = [
   { value: 'MANUELLE', label: 'Manuelle' },
@@ -9,16 +9,7 @@ const TRANSMISSIONS = [
 ]
 
 export default function CarFilter({ filters, onChange, priceLabel = 'Prix max (DH)' }) {
-  const [categories, setCategories] = useState([])
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    categorieService
-      .getAll()
-      .then((list) => setCategories(list || []))
-      .catch(() => {})
-      .finally(() => setLoading(false))
-  }, [])
+  const { categories, loading } = useCategories()
 
   const setFilter = (key, value) => {
     onChange?.({ ...filters, [key]: value })
@@ -28,34 +19,31 @@ export default function CarFilter({ filters, onChange, priceLabel = 'Prix max (D
     onChange?.({ marque: '', categorieId: '', prixMax: '', transmission: '' })
   }
 
-  const selectClass =
-    'w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-primary-600 focus:ring-2 focus:ring-primary-100'
-
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200">
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">Filtres</h3>
+    <div className="car-filter">
+      <h3 className="car-filter__title">Filtres</h3>
 
-      <div className="space-y-4">
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Marque</label>
+      <div className="car-filter__body">
+        <div className="form-field">
+          <label className="form-label">Marque</label>
           <input
             type="text"
             value={filters.marque || ''}
             onChange={(e) => setFilter('marque', e.target.value)}
             placeholder="Ex : Renault"
-            className={selectClass}
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Catégorie</label>
+        <div className="form-field">
+          <label className="form-label">Catégorie</label>
           {loading ? (
-            <Spinner label="" />
+            <Spinner label="" className="spinner--inline" />
           ) : (
             <select
               value={filters.categorieId || ''}
               onChange={(e) => setFilter('categorieId', e.target.value)}
-              className={selectClass}
+              className="form-control"
             >
               <option value="">Toutes les catégories</option>
               {categories.map((cat) => (
@@ -67,24 +55,24 @@ export default function CarFilter({ filters, onChange, priceLabel = 'Prix max (D
           )}
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">{priceLabel}</label>
+        <div className="form-field">
+          <label className="form-label">{priceLabel}</label>
           <input
             type="number"
             min="0"
             value={filters.prixMax || ''}
             onChange={(e) => setFilter('prixMax', e.target.value)}
             placeholder="Ex : 500"
-            className={selectClass}
+            className="form-control"
           />
         </div>
 
-        <div>
-          <label className="mb-1 block text-sm font-medium text-gray-700">Transmission</label>
+        <div className="form-field">
+          <label className="form-label">Transmission</label>
           <select
             value={filters.transmission || ''}
             onChange={(e) => setFilter('transmission', e.target.value)}
-            className={selectClass}
+            className="form-control"
           >
             <option value="">Toutes</option>
             {TRANSMISSIONS.map((t) => (
@@ -95,7 +83,7 @@ export default function CarFilter({ filters, onChange, priceLabel = 'Prix max (D
           </select>
         </div>
 
-        <Button variant="outline" className="w-full" onClick={resetAll}>
+        <Button variant="outline" className="btn--block" onClick={resetAll}>
           Réinitialiser
         </Button>
       </div>

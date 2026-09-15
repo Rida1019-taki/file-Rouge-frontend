@@ -2,16 +2,19 @@ import { useState } from 'react'
 import reservationService from '../../services/reservationService'
 import useList from '../../hooks/useList'
 import useToast from '../../hooks/useToast'
+import useHomeNavigation from '../../hooks/useHomeNavigation'
 import Toast from '../../components/ui/Toast'
 import ReservationCard from '../../components/reservation/ReservationCard'
 import Spinner from '../../components/ui/Spinner'
 import EmptyState from '../../components/ui/EmptyState'
 import Button from '../../components/ui/Button'
 import { getErrorMessage } from '../../utils/helpers'
+import './client-pages.css'
 
 export default function MyReservationsPage() {
   const { data: reservations, loading, reload } = useList(reservationService.getMy)
   const { toast, show, hide } = useToast()
+  const goToSection = useHomeNavigation()
   const [busyId, setBusyId] = useState(null)
 
   const handleCancel = async (reservation) => {
@@ -28,13 +31,13 @@ export default function MyReservationsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <h1 className="mb-6 text-3xl font-bold text-gray-900">Mes réservations</h1>
+    <div className="reservations-page">
+      <h1 className="page-title">Mes réservations</h1>
 
       {loading ? (
         <Spinner label="Chargement de vos réservations..." />
       ) : reservations?.length ? (
-        <div className="space-y-4">
+        <div className="reservations-page__list">
           {reservations.map((reservation) => (
             <ReservationCard
               key={reservation.id}
@@ -46,9 +49,9 @@ export default function MyReservationsPage() {
         </div>
       ) : (
         <EmptyState message="Vous n'avez pas encore de réservation.">
-          <a href="/#catalog">
-            <Button>Parcourir les voitures</Button>
-          </a>
+          <Button onClick={() => goToSection('catalog')}>
+            Parcourir les voitures
+          </Button>
         </EmptyState>
       )}
 

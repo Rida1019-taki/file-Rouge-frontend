@@ -1,4 +1,4 @@
-const DEFAULT_COLOR = 'bg-gray-100 text-gray-700'
+const DEFAULT_COLOR = 'badge--neutral'
 
 export const LISTING_LABELS = {
   SALE: 'À vendre',
@@ -6,8 +6,8 @@ export const LISTING_LABELS = {
 }
 
 export const LISTING_COLORS = {
-  SALE: 'bg-amber-100 text-amber-800',
-  RENTAL: 'bg-blue-100 text-blue-800'
+  SALE: 'badge--sale',
+  RENTAL: 'badge--rental'
 }
 
 export function listingLabel(type) {
@@ -15,14 +15,14 @@ export function listingLabel(type) {
 }
 
 export function listingColor(type) {
-  return LISTING_COLORS[type] || 'bg-gray-100 text-gray-700'
+  return LISTING_COLORS[type] || 'badge--neutral'
 }
 
 export const STATUT_COLORS = {
-  EN_ATTENTE: 'bg-yellow-100 text-yellow-800',
-  CONFIRMEE: 'bg-green-100 text-green-800',
-  ANNULEE: 'bg-red-100 text-red-800',
-  TERMINEE: 'bg-blue-100 text-blue-800'
+  EN_ATTENTE: 'badge--pending',
+  CONFIRMEE: 'badge--confirmed',
+  ANNULEE: 'badge--cancelled',
+  TERMINEE: 'badge--done'
 }
 
 export const STATUT_LABELS = {

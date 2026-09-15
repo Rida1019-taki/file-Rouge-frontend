@@ -1,0 +1,50 @@
+/* =====================================================
+   Badges — types d'annonce et statuts de réservation
+   ===================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.badge--sale {
+  background: var(--sale-bg);
+  color: var(--sale);
+}
+
+.badge--rental {
+  background: var(--rental-bg);
+  color: var(--rental);
+}
+
+.badge--pending {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.badge--confirmed {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.badge--cancelled {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.badge--done {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.badge--neutral {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}

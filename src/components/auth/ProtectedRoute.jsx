@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth'
 import Spinner from '../ui/Spinner'
+import './auth.css'
 
 export default function ProtectedRoute({ roles }) {
   const { user, loading } = useAuth()
@@ -8,7 +9,7 @@ export default function ProtectedRoute({ roles }) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
+      <div className="auth-loader">
         <Spinner label="Vérification de la session..." />
       </div>
     )

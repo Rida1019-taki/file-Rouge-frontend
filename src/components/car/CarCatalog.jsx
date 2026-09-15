@@ -6,6 +6,7 @@ import CarFilter from './CarFilter'
 import SearchBar from '../common/SearchBar'
 import Spinner from '../ui/Spinner'
 import EmptyState from '../ui/EmptyState'
+import './CarCatalog.css'
 
 const normalize = (value) =>
   String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -16,6 +17,7 @@ export default function CarCatalog({
   listingType,
   title,
   subtitle,
+  eyebrow,
   priceLabel = 'Prix max (DH)'
 }) {
   const fetchFn = useMemo(
@@ -55,45 +57,46 @@ export default function CarCatalog({
 
   return (
     <>
-      <section className="bg-gradient-to-br from-primary-700 via-primary-600 to-primary-800 pb-24 pt-16">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6">
-          <h1 className="mx-auto max-w-3xl text-4xl font-bold leading-tight text-white md:text-5xl">
-            {title}
-          </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-primary-100">{subtitle}</p>
-          <div className="mt-8 flex justify-center">
+      <section className="catalog-hero">
+        <div className="container catalog-hero__inner">
+          {eyebrow && <span className="catalog-hero__eyebrow">{eyebrow}</span>}
+          <h1 className="catalog-hero__title">{title}</h1>
+          <p className="catalog-hero__subtitle">{subtitle}</p>
+          <div className="catalog-hero__search">
             <SearchBar onSearch={handleSearch} />
           </div>
         </div>
       </section>
 
-      <section id="catalog" className="mx-auto -mt-14 max-w-7xl px-4 pb-16 sm:px-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-gray-900">Nos voitures</h2>
-          {ville && (
-            <button
-              type="button"
-              onClick={() => setVille('')}
-              className="rounded-full bg-primary-100 px-3 py-1.5 text-sm font-medium text-primary-700 transition hover:bg-primary-200"
-            >
-              {ville} ✕
-            </button>
-          )}
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-          <aside>
-            <CarFilter filters={filters} onChange={setFilters} priceLabel={priceLabel} />
-          </aside>
-
-          <div>
-            {error ? (
-              <EmptyState message="Impossible de charger les voitures. Vérifiez que le backend est démarré." />
-            ) : loading ? (
-              <Spinner label="Chargement des voitures..." />
-            ) : (
-              <CarList voitures={filtered} />
+      <section id="catalog" className="catalog">
+        <div className="container">
+          <div className="catalog__header">
+            <h2 className="catalog__title">Nos voitures</h2>
+            {ville && (
+              <button
+                type="button"
+                onClick={() => setVille('')}
+                className="catalog__chip"
+              >
+                {ville} ✕
+              </button>
             )}
+          </div>
+
+          <div className="grid-aside">
+            <aside>
+              <CarFilter filters={filters} onChange={setFilters} priceLabel={priceLabel} />
+            </aside>
+
+            <div>
+              {error ? (
+                <EmptyState message="Impossible de charger les voitures. Vérifiez que le backend est démarré." />
+              ) : loading ? (
+                <Spinner label="Chargement des voitures..." />
+              ) : (
+                <CarList voitures={filtered} />
+              )}
+            </div>
           </div>
         </div>
       </section>

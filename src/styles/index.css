@@ -1,23 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  *,
-  *::before,
-  *::after {
-    box-sizing: border-box;
-  }
-
-  body {
-    @apply m-0 bg-gray-50 text-gray-900 antialiased;
-  }
-}
-
-@layer components {
-  input:-webkit-autofill,
-  input:-webkit-autofill:hover,
-  input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0 1000px white inset;
-  }
-}
+@import './variables.css';
+@import './base.css';
+@import './utilities.css';
+@import './forms.css';
+@import './badges.css';
+@import './list-items.css';

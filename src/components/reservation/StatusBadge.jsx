@@ -10,8 +10,8 @@ export default function StatusBadge({ statut }) {
 
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold ${
-        STATUT_COLORS[statut] || 'bg-gray-100 text-gray-700'
+      className={`badge ${
+        STATUT_COLORS[statut] || 'badge--neutral'
       }`}
     >
       {labels[statut] || statut}

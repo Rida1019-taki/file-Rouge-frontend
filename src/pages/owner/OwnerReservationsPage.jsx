@@ -7,6 +7,7 @@ import EmptyState from '../../components/ui/EmptyState'
 import useToast from '../../hooks/useToast'
 import Toast from '../../components/ui/Toast'
 import { getErrorMessage } from '../../utils/helpers'
+import './owner-pages.css'
 
 export default function OwnerReservationsPage() {
   const { data: reservations, loading, reload } = useList(reservationService.getOwner)
@@ -41,12 +42,12 @@ export default function OwnerReservationsPage() {
 
   return (
     <div>
-      <h1 className="mb-6 text-3xl font-bold text-gray-900">Réservations reçues</h1>
+      <h1 className="page-title page-title--spaced">Réservations reçues</h1>
 
       {loading ? (
         <Spinner label="Chargement des réservations..." />
       ) : reservations?.length ? (
-        <div className="space-y-4">
+        <div className="owner-list">
           {reservations.map((reservation) => (
             <ReservationCard
               key={reservation.id}

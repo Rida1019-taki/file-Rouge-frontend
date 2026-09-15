@@ -1,3 +1,5 @@
+import './StatsCard.css'
+
 const ICONS = {
   voitures: (
     <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
@@ -14,10 +16,10 @@ const ICONS = {
 }
 
 const COLORS = {
-  voitures: 'bg-blue-100 text-blue-600',
-  reservations: 'bg-green-100 text-green-600',
-  clients: 'bg-purple-100 text-purple-600',
-  revenus: 'bg-amber-100 text-amber-600'
+  voitures: 'stat-card__icon--blue',
+  reservations: 'stat-card__icon--green',
+  clients: 'stat-card__icon--purple',
+  revenus: 'stat-card__icon--amber'
 }
 
 export default function StatsCard({ title, value, icon = 'voitures', hint }) {
@@ -26,17 +28,17 @@ export default function StatsCard({ title, value, icon = 'voitures', hint }) {
     : Number(value || 0).toLocaleString('fr-MA')
 
   return (
-    <div className="rounded-xl bg-white p-5 shadow-sm ring-1 ring-gray-200">
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-500">{title}</p>
-        <span className={`flex h-10 w-10 items-center justify-center rounded-lg ${COLORS[icon] || COLORS.voitures}`}>
-          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+    <div className="stat-card">
+      <div className="stat-card__top">
+        <p className="stat-card__label">{title}</p>
+        <span className={`stat-card__icon ${COLORS[icon] || COLORS.voitures}`}>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             {ICONS[icon] || ICONS.voitures}
           </svg>
         </span>
       </div>
-      <p className="mt-2 text-3xl font-bold text-gray-900">{displayValue}</p>
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
+      <p className="stat-card__value">{displayValue}</p>
+      {hint && <p className="stat-card__hint">{hint}</p>}
     </div>
   )
 }

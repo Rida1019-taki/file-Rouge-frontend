@@ -1,0 +1,15 @@
+.reservations-page {
+  max-width: 840px;
+  margin-inline: auto;
+  padding: 40px 0;
+}
+
+.reservations-page > .page-title {
+  margin-bottom: 24px;
+}
+
+.reservations-page__list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

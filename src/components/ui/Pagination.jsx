@@ -1,3 +1,5 @@
+import './Pagination.css'
+
 export default function Pagination({ page, totalPages = 1, onChange }) {
   if (totalPages <= 1) return null
 
@@ -6,23 +8,19 @@ export default function Pagination({ page, totalPages = 1, onChange }) {
       key={number}
       type="button"
       onClick={() => onChange?.(number)}
-      className={`h-9 min-w-9 rounded-lg px-2 text-sm font-medium transition ${
-        active
-          ? 'bg-primary-600 text-white'
-          : 'text-gray-600 hover:bg-gray-100'
-      }`}
+      className={`pagination__page${active ? ' pagination__page--active' : ''}`}
     >
       {label}
     </button>
   )
 
   return (
-    <div className="flex items-center justify-center gap-1.5 py-6">
+    <div className="pagination">
       <button
         type="button"
         disabled={page <= 1}
         onClick={() => onChange?.(page - 1)}
-        className="h-9 rounded-lg px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+        className="pagination__nav"
       >
         Précédent
       </button>
@@ -35,7 +33,7 @@ export default function Pagination({ page, totalPages = 1, onChange }) {
         type="button"
         disabled={page >= totalPages}
         onClick={() => onChange?.(page + 1)}
-        className="h-9 rounded-lg px-3 text-sm font-medium text-gray-600 transition hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+        className="pagination__nav"
       >
         Suivant
       </button>

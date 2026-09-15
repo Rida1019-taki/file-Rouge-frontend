@@ -1,0 +1,26 @@
+.car-filter {
+  padding: 28px;
+  background: var(--filter-bg);
+  border-radius: var(--radius-lg);
+}
+
+.car-filter__title {
+  padding-bottom: 0;
+  margin-bottom: 24px;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.car-filter__body .form-field {
+  margin-bottom: 20px;
+}
+
+.car-filter__body .form-field:last-of-type {
+  margin-bottom: 24px;
+}
+
+.car-filter__body .btn {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}

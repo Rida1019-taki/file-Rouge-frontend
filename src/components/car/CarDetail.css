@@ -1,0 +1,138 @@
+.car-detail {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+@media (min-width: 1024px) {
+  .car-detail {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+}
+
+.car-detail__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.car-detail__title {
+  font-size: 27px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.car-detail__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 14px 0 24px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.car-detail__meta svg {
+  flex-shrink: 0;
+}
+
+.car-detail__sep {
+  color: var(--border-strong);
+  margin-inline: 2px;
+}
+
+/* Caractéristiques */
+.car-detail__specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 32px;
+}
+
+@media (min-width: 640px) {
+  .car-detail__specs {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.car-detail__spec {
+  padding: 16px 12px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.car-detail__spec-icon {
+  margin-inline: auto;
+  color: var(--accent);
+}
+
+.car-detail__spec-value {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.car-detail__spec-label {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.car-detail__section {
+  margin-top: 32px;
+}
+
+.car-detail__section-title {
+  margin-bottom: 10px;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.car-detail__desc {
+  color: var(--text-muted);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+/* Prix / réservation */
+.car-detail__sidebar {
+  position: sticky;
+  top: calc(var(--header-height) + 24px);
+}
+
+.car-detail__price-card {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.car-detail__price-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.car-detail__price {
+  margin: 2px 0 6px;
+  font-size: 27px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.car-detail__price-note {
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.car-detail__cta {
+  margin-top: 24px;
+  width: 100%;
+}
