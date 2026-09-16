@@ -2,7 +2,6 @@ import useFetch from '../../hooks/useFetch'
 import api from '../../api/axios'
 import StatsCard from '../../components/common/StatsCard'
 import Spinner from '../../components/ui/Spinner'
-import { formatMontant } from '../../utils/format'
 import './admin-pages.css'
 
 export default function AdminDashboardPage() {
@@ -38,12 +37,6 @@ export default function AdminDashboardPage() {
         <StatsCard title="Voitures" value={stats.voituresCount ?? stats.totalVoitures ?? stats.cars ?? 0} icon="voitures" />
         <StatsCard title="Réservations" value={stats.reservationsCount ?? stats.totalReservations ?? 0} icon="reservations" />
         <StatsCard title="Utilisateurs" value={stats.usersCount ?? stats.totalUsers ?? stats.users ?? 0} icon="clients" />
-        <StatsCard
-          title="Revenu total"
-          value={formatMontant(stats.revenue ?? stats.totalRevenu ?? 0)}
-          icon="revenus"
-          hint="Chiffre d'affaires global"
-        />
       </div>
 
       <div className="admin-panels">

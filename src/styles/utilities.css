@@ -1,8 +1,3 @@
-/* =====================================================
-   Utilities de base — layout et typographie transverses
-   ===================================================== */
-
-/* Conteneurs de page */
 .container {
   width: 100%;
   max-width: var(--container-max);
@@ -24,7 +19,6 @@
   }
 }
 
-/* Disposition flex */
 .flex {
   display: flex;
 }
@@ -74,7 +68,6 @@
   flex-shrink: 0;
 }
 
-/* Écarts */
 .gap-1 {
   gap: 4px;
 }
@@ -103,7 +96,6 @@
   gap: 32px;
 }
 
-/* Grilles responsives */
 .grid {
   display: grid;
 }
@@ -158,7 +150,6 @@
   }
 }
 
-/* Layout catalogue : filtre latéral + liste */
 .grid-aside {
   display: grid;
   grid-template-columns: 1fr;
@@ -172,12 +163,10 @@
   }
 }
 
-/* Marges horizontales */
 .mx-auto {
   margin-inline: auto;
 }
 
-/* Typographie */
 .text-xs {
   font-size: 12px;
 }
@@ -248,7 +237,6 @@
   position: absolute;
 }
 
-/* Titres de page */
 .page-title {
   font-size: 26px;
   font-weight: 800;
@@ -261,10 +249,6 @@
     font-size: 32px;
   }
 }
-
-/* =====================================================
-   Section catalogue (home + pages vente / location)
-   ===================================================== */
 
 .catalog {
   padding: 72px 0 96px;

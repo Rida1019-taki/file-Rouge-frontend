@@ -29,6 +29,7 @@ export const ENDPOINTS = {
     byId: (id) => `/images/${id}`
   },
   admin: {
-    stats: '/admin/stats'
+    stats: '/admin/stats',
+    users: '/admin/users'
   }
 }

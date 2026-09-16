@@ -1,7 +1,3 @@
-/* =====================================================
-   Listes de voitures et onglets — dashboards Owner / Admin
-   ===================================================== */
-
 .tabs {
   display: flex;
   flex-wrap: wrap;
@@ -36,7 +32,6 @@
   color: #ffffff;
 }
 
-/* Ligne voiture (liste owner / admin) */
 .car-row {
   display: flex;
   flex-direction: column;

@@ -66,7 +66,7 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ──────────── Hero ──────────── */}
+
       <section className="home-hero">
         <div className="container home-hero__inner">
           <div className="home-hero__content">
@@ -103,7 +103,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ──────────── Services ──────────── */}
       <section className="home-services">
         <div className="container home-services__grid">
           <article className="service-panel">
@@ -138,10 +137,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ──────────── Catégories ──────────── */}
       <CategorySection />
 
-      {/* ──────────── Catalogue ──────────── */}
       <section id="catalog" className="catalog">
         <div className="container">
           <div className="catalog__header">
@@ -178,10 +175,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ──────────── Confiance ──────────── */}
       <TrustSection />
 
-      {/* ──────────── À propos ──────────── */}
       <section id="a-propos" className="home-section home-section--white">
         <div className="container">
           <h2 className="home-section__title">À propos de Tomobilty.ma</h2>
@@ -193,7 +188,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ──────────── Contact ──────────── */}
       <section id="contact" className="home-section">
         <div className="container">
           <h2 className="home-section__title">Contactez-nous</h2>

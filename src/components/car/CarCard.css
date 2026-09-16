@@ -11,7 +11,6 @@
   border-color: var(--border-strong);
 }
 
-/* Image à rapport fixe, cadre net */
 .car-card__media {
   position: relative;
   aspect-ratio: 16 / 10;

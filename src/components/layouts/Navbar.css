@@ -14,7 +14,6 @@
   gap: 16px;
 }
 
-/* Logo — textuel, brut, éditorial */
 .navbar__brand {
   display: flex;
   align-items: center;
@@ -29,7 +28,6 @@
   white-space: nowrap;
 }
 
-/* Liens desktop */
 .navbar__links {
   display: none;
   align-items: center;
@@ -53,7 +51,6 @@
   font-weight: 600;
 }
 
-/* Actions */
 .navbar__actions {
   display: flex;
   align-items: center;
@@ -108,7 +105,6 @@
   }
 }
 
-/* Bouton hamburger */
 .navbar__toggle {
   display: flex;
   flex-direction: column;
@@ -150,7 +146,6 @@
   }
 }
 
-/* Panneau mobile */
 .navbar__mobile {
   display: flex;
   flex-direction: column;

@@ -18,6 +18,7 @@ import CarFormPage from './pages/owner/CarFormPage'
 import OwnerReservationsPage from './pages/owner/OwnerReservationsPage'
 import AdminDashboardPage from './pages/admin/AdminDashboardPage'
 import AdminCarsPage from './pages/admin/AdminCarsPage'
+import UserManagement from './pages/admin/UserManagement'
 
 function ScrollToTop() {
   const { pathname, hash, state } = useLocation()
@@ -64,6 +65,7 @@ export default function App() {
         <Route element={<DashboardLayout />}>
           <Route path="/admin" element={<AdminDashboardPage />} />
           <Route path="/admin/voitures" element={<AdminCarsPage />} />
+          <Route path="/admin/utilisateurs" element={<UserManagement />} />
         </Route>
       </Route>
 
