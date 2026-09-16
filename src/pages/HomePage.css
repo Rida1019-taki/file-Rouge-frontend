@@ -1,12 +1,13 @@
 /* =====================================================
-   Home — Hero, services, sections contact
+   Home — Hero editorial, sections, contact
+   Design plat : zéro dégradé, zéro animation, zéro ombre
    ===================================================== */
 
 /* ─── Hero ─── */
 .home-hero {
-  background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+  background: #ffffff;
   border-bottom: 1px solid var(--border);
-  padding: 80px 0 96px;
+  padding: 72px 0 88px;
 }
 
 @media (min-width: 768px) {
@@ -23,7 +24,7 @@
 
 @media (min-width: 768px) {
   .home-hero__inner {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr 1fr;
     gap: 56px;
   }
 }
@@ -31,108 +32,91 @@
 .home-hero__label {
   display: inline-block;
   margin-bottom: 20px;
-  color: var(--accent);
+  color: var(--text-muted);
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .home-hero__title {
-  font-size: clamp(38px, 5vw, 60px);
+  font-size: clamp(40px, 6vw, 72px);
   font-weight: 800;
-  line-height: 1.08;
-  color: #0f172a;
-  letter-spacing: -0.03em;
+  line-height: 1.02;
+  color: var(--text);
+  letter-spacing: -0.04em;
 }
 
 .home-hero__subtitle {
-  margin-top: 20px;
+  margin-top: 24px;
   font-size: 17px;
   line-height: 1.7;
-  color: #64748b;
-  max-width: 520px;
+  color: var(--text-muted);
+  max-width: 480px;
 }
 
 .home-hero__cta {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
-  margin-top: 36px;
+  gap: 12px;
+  margin-top: 40px;
 }
 
-/* Boutons hero — minimalistes, sans ombres lourdes */
+/* Boutons hero — plats, haute contraste */
 .btn--hero-primary {
-  background: var(--accent);
+  background: var(--text);
   color: #ffffff;
-  border-color: var(--accent);
-  box-shadow: none;
+  border-color: var(--text);
 }
 
 .btn--hero-primary:hover {
-  background: var(--accent-dark);
-  border-color: var(--accent-dark);
+  background: #000000;
+  border-color: #000000;
 }
 
 .btn--hero-outline {
   background: transparent;
-  color: #0f172a;
+  color: var(--text);
   border-color: var(--border-strong);
 }
 
 .btn--hero-outline:hover {
   background: var(--surface-muted);
-  border-color: var(--text-muted);
+  border-color: var(--text);
 }
 
-/* Image hero — propre, sans ombre lourde */
+/* Image hero — photo réelle, cadre fin, taille définie */
 .home-hero__media {
   display: none;
-  position: relative;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-muted);
 }
 
 @media (min-width: 768px) {
   .home-hero__media {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
+    display: block;
   }
 }
 
 .home-hero__media img {
-  max-width: 460px;
   width: 100%;
-  height: auto;
-  object-fit: contain;
-  animation: hero-float 6s ease-in-out infinite;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .home-hero__media img {
-    animation: none;
-  }
-}
-
-@keyframes hero-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
+  height: 100%;
+  object-fit: cover;
 }
 
 /* ─── Services ─── */
 .home-services {
   padding: 80px 0 72px;
+  border-bottom: 1px solid var(--border);
 }
 
 .home-services__grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2rem;
+  gap: 0;
 }
 
 @media (min-width: 768px) {
@@ -143,48 +127,42 @@
 
 .service-panel {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
   align-items: flex-start;
   padding: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
   background: var(--surface);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
-}
-
-@media (max-width: 639px) {
-  .service-panel {
-    flex-direction: column;
-  }
 }
 
 .service-panel__icon {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  flex-shrink: 0;
-  border-radius: var(--radius-md);
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .service-panel__icon--sale {
-  background: var(--sale-bg);
-  color: var(--sale);
+  color: var(--text);
 }
 
 .service-panel__icon--rental {
-  background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--text);
 }
 
 .service-panel__title {
-  font-size: 20px;
-  font-weight: 600;
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 
 .service-panel__desc {
-  margin-top: 10px;
+  margin-top: 8px;
   font-size: 15px;
   line-height: 1.6;
   color: var(--text-muted);
@@ -195,25 +173,25 @@
 }
 
 .service-panel__btn--sale {
-  background: var(--sale);
+  background: var(--text);
   color: #ffffff;
-  border-color: var(--sale);
+  border-color: var(--text);
 }
 
 .service-panel__btn--sale:hover {
-  background: #8a5206;
-  border-color: #8a5206;
+  background: #000000;
+  border-color: #000000;
 }
 
 .service-panel__btn--rental {
-  background: var(--accent);
-  color: #ffffff;
-  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
 }
 
 .service-panel__btn--rental:hover {
-  background: var(--accent-dark);
-  border-color: var(--accent-dark);
+  background: var(--surface-muted);
+  border-color: var(--text);
 }
 
 /* ─── Recherche en haut du catalogue ─── */
@@ -223,7 +201,7 @@
 
 /* ─── Sections maison ─── */
 .home-section {
-  padding: 64px 0;
+  padding: 72px 0;
 }
 
 .home-section--white {
@@ -231,22 +209,23 @@
 }
 
 .home-section__title {
-  font-size: 26px;
-  font-weight: 600;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   text-align: center;
   color: var(--text);
 }
 
 @media (min-width: 640px) {
   .home-section__title {
-    font-size: 28px;
+    font-size: 34px;
   }
 }
 
 .home-section__text {
   max-width: 720px;
   margin: 16px auto 0;
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.7;
   text-align: center;
   color: var(--text-muted);
@@ -269,5 +248,5 @@
 }
 
 .home-contact__item svg {
-  color: var(--accent);
+  color: var(--text);
 }

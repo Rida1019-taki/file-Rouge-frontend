@@ -1,11 +1,12 @@
 .catalog-hero {
-  padding: 64px 0 80px;
+  padding: 64px 0 72px;
   background: var(--hero-bg);
+  border-bottom: 1px solid #1f2937;
 }
 
 @media (min-width: 768px) {
   .catalog-hero {
-    padding: 88px 0 104px;
+    padding: 96px 0 104px;
   }
 }
 
@@ -15,25 +16,23 @@
 
 .catalog-hero__eyebrow {
   display: inline-block;
-  padding: 6px 16px;
-  margin-bottom: 18px;
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.85);
+  padding: 0 0 16px;
+  margin-bottom: 8px;
+  color: var(--text-on-dark);
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 1.2px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .catalog-hero__title {
   max-width: 800px;
   margin-inline: auto;
-  font-size: clamp(30px, 4.5vw, 44px);
-  font-weight: 700;
-  line-height: 1.15;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  line-height: 1.05;
   color: #ffffff;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
 }
 
 .catalog-hero__subtitle {
@@ -47,5 +46,5 @@
 .catalog-hero__search {
   display: flex;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 36px;
 }

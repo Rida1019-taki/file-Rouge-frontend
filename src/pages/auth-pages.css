@@ -80,7 +80,6 @@
   text-align: center;
   font-size: 14px;
   font-weight: 600;
-  transition: border-color .15s ease, background-color .15s ease, color .15s ease;
 }
 
 .role-btn:hover {

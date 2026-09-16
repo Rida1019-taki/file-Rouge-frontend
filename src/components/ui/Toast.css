@@ -19,7 +19,7 @@
   color: #ffffff;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   pointer-events: auto;
 }
 
@@ -44,7 +44,6 @@
   padding: 2px;
   border-radius: 4px;
   opacity: 0.85;
-  transition: background-color 0.15s ease, opacity 0.15s ease;
 }
 
 .toast__close:hover {

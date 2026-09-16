@@ -9,10 +9,11 @@ import CategorySection from '../components/common/CategorySection'
 import TrustSection from '../components/common/TrustSection'
 import Spinner from '../components/ui/Spinner'
 import EmptyState from '../components/ui/EmptyState'
+import { FALLBACK_CAR_IMAGE_GALLERY } from '../utils/carImage'
 import './HomePage.css'
 
 const HERO_CAR_IMAGE =
-  'https://pngimg.com/uploads/audi/audi_PNG1716.png'
+  'https://images.unsplash.com/photo-1609521263047-f8f205293f24?q=80&w=1600&auto=format&fit=crop'
 
 const normalize = (value) =>
   String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -30,7 +31,7 @@ export default function HomePage() {
     const target = location.state?.scrollTo
     if (!target) return
     const timer = window.setTimeout(() => {
-      document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' })
+      document.getElementById(target)?.scrollIntoView()
       navigate(location.pathname, { replace: true, state: null })
     }, 0)
     return () => window.clearTimeout(timer)
@@ -60,7 +61,7 @@ export default function HomePage() {
 
   const handleSearch = (city) => {
     setVille(city)
-    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById('catalog')?.scrollIntoView()
   }
 
   return (
@@ -93,6 +94,10 @@ export default function HomePage() {
               src={HERO_CAR_IMAGE}
               alt="Voiture moderne Tomobilty.ma"
               loading="eager"
+              onError={(e) => {
+                e.currentTarget.onerror = null
+                e.currentTarget.src = FALLBACK_CAR_IMAGE_GALLERY
+              }}
             />
           </div>
         </div>

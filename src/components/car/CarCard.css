@@ -3,38 +3,27 @@
   flex-direction: column;
   overflow: hidden;
   background: var(--surface);
-  border-radius: 14px;
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
 }
 
 .car-card:hover {
-  box-shadow: var(--shadow-hover);
-  transform: translateY(-3px);
+  border-color: var(--border-strong);
 }
 
-/* Image ~55% de la hauteur de la card */
+/* Image à rapport fixe, cadre net */
 .car-card__media {
   position: relative;
   aspect-ratio: 16 / 10;
   overflow: hidden;
   background: var(--surface-muted);
+  border-bottom: 1px solid var(--border);
 }
 
 .car-card__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.car-card__placeholder {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--border-strong);
-  background: var(--primary-soft);
 }
 
 .car-card__badge {
@@ -44,9 +33,12 @@
 }
 
 .car-card__badge .badge {
-  padding: 4px 12px;
-  font-size: 12.5px;
-  font-weight: 700;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #ffffff;
+  border-color: var(--border);
+  color: var(--text);
 }
 
 .car-card__body {
@@ -57,55 +49,35 @@
 }
 
 .car-card__title {
-  font-size: 17px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
 
 .car-card__specs {
-  margin-top: 5px;
-  font-size: 13.5px;
+  margin-top: 6px;
+  font-size: 13px;
   color: var(--text-muted);
-}
-
-.car-card__location {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 3px;
-  font-size: 12.5px;
-  color: var(--text-faint);
-}
-
-.car-card__location svg {
-  flex-shrink: 0;
-  color: var(--accent);
 }
 
 .car-card__footer {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
   margin-top: auto;
-  padding-top: 18px;
+  padding-top: 20px;
 }
 
 .car-card__price {
   font-size: 20px;
   font-weight: 800;
   color: var(--text);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
-.car-card__action {
+.car-card__location {
   font-size: 13px;
-  font-weight: 600;
-  color: var(--accent);
-  white-space: nowrap;
-  transition: color 0.15s ease;
-}
-
-.car-card:hover .car-card__action {
-  color: var(--primary);
+  color: var(--text-faint);
 }

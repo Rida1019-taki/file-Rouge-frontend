@@ -52,7 +52,7 @@ export default function CarCatalog({
 
   const handleSearch = (city) => {
     setVille(city)
-    document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' })
+    document.getElementById('catalog')?.scrollIntoView()
   }
 
   return (

@@ -29,13 +29,10 @@ export default function Navbar() {
           className="navbar__brand"
           onClick={() => {
             close()
-            window.scrollTo({ top: 0, behavior: 'smooth' })
+            window.scrollTo({ top: 0 })
           }}
         >
-          <span className="navbar__logo">T</span>
-          <span className="navbar__name">
-            Tomo<span className="navbar__name-accent">bility.ma</span>
-          </span>
+          <span className="navbar__name">Tomobility</span>
         </Link>
 
         <div className="navbar__links">
@@ -43,7 +40,7 @@ export default function Navbar() {
             to="/"
             className={linkClass}
             end
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() => window.scrollTo({ top: 0 })}
           >
             Accueil
           </NavLink>
@@ -78,7 +75,7 @@ export default function Navbar() {
           {user ? (
             <>
               <span className="navbar__greeting">
-                Salut, {user.prenom || user.nom || user.email}
+                {user.prenom || user.nom || user.email}
               </span>
               {user.role !== 'CLIENT' && (
                 <Link
@@ -132,7 +129,7 @@ export default function Navbar() {
             end
             onClick={() => {
               close()
-              window.scrollTo({ top: 0, behavior: 'smooth' })
+              window.scrollTo({ top: 0 })
             }}
           >
             Accueil

@@ -9,9 +9,8 @@
   align-items: center;
   padding: 6px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: var(--surface);
-  box-shadow: var(--shadow-md);
 }
 
 .searchbar__icon {
@@ -38,12 +37,11 @@
 .searchbar__btn {
   flex-shrink: 0;
   padding: 11px 22px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--primary);
   color: #ffffff;
   font-size: 15px;
   font-weight: 600;
-  transition: background-color 0.15s ease;
 }
 
 .searchbar__btn:hover {
@@ -57,9 +55,8 @@
   z-index: 30;
   overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   background: var(--surface);
-  box-shadow: var(--shadow-md);
 }
 
 .searchbar__item {
@@ -72,7 +69,6 @@
   text-align: left;
   font-size: 14px;
   color: var(--text);
-  transition: background-color 0.15s ease;
 }
 
 .searchbar__item:hover {

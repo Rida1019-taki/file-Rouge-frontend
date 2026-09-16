@@ -19,7 +19,6 @@
   border-radius: var(--radius-sm);
   background: var(--surface);
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .announce-type__option:hover {
@@ -86,7 +85,6 @@
   cursor: pointer;
   color: var(--primary);
   font-weight: 600;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .form-control--file:hover {
@@ -136,7 +134,6 @@
   font-size: 12px;
   line-height: 1;
   cursor: pointer;
-  transition: background-color 0.15s ease;
 }
 
 .image-cell__remove:hover {

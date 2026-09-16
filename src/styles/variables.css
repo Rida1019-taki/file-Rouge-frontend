@@ -1,64 +1,64 @@
 :root {
-  /* Couleurs principales */
-  --primary: #143a6e;
-  --primary-dark: #0e2b50;
-  --primary-soft: #e7eef7;
+  /* Couleurs principales — éditorial, haute contraste */
+  --primary: #0f172a;
+  --primary-dark: #000000;
+  --primary-soft: #f1f5f9;
 
-  --accent: #2563eb;
-  --accent-dark: #1d4ed8;
-  --accent-soft: #eaf1ff;
+  --accent: #0f172a;
+  --accent-dark: #000000;
+  --accent-soft: #f8fafc;
 
   /* Surfaces */
-  --background: #f5f7fb;
+  --background: #ffffff;
   --surface: #ffffff;
-  --surface-muted: #f8fafd;
-  --filter-bg: #f8fafc;
+  --surface-muted: #f8fafc;
+  --filter-bg: #fafafa;
 
-  /* Fond hero & footer (navy profond, uni) */
-  --hero-bg: #10315e;
-  --footer-bg: #0b2547;
+  /* Fond hero & footer (noir uni, plat) */
+  --hero-bg: #0f172a;
+  --footer-bg: #0f172a;
 
   /* Texte */
-  --text: #131f33;
-  --text-muted: #5c6b80;
-  --text-faint: #8b9bb0;
-  --text-on-dark: #d6e2f3;
+  --text: #111827;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
+  --text-on-dark: #cbd5e1;
 
   /* Bordures */
-  --border: #eef1f6;
-  --border-strong: #c6d0dd;
+  --border: #e5e7eb;
+  --border-strong: #9ca3af;
 
   /* États */
-  --success: #1f7a43;
-  --success-bg: #eaf6ee;
-  --danger: #c0392b;
-  --danger-bg: #fcefef;
-  --warning: #a16207;
-  --warning-bg: #faf3e2;
+  --success: #15803d;
+  --success-bg: #f0fdf4;
+  --danger: #b91c1c;
+  --danger-bg: #fef2f2;
+  --warning: #b45309;
+  --warning-bg: #fffbeb;
 
   /* Types d'annonce */
-  --sale: #a16207;
-  --sale-bg: #faf3e2;
-  --rental: #2563eb;
-  --rental-bg: #eaf1ff;
+  --sale: #0f172a;
+  --sale-bg: #f8fafc;
+  --rental: #0f172a;
+  --rental-bg: #f8fafc;
 
-  /* Rayons */
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  /* Rayons — minimal, jamais rond */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
 
-  /* Ombres */
-  --shadow-sm: 0 1px 2px rgba(15, 30, 55, 0.05);
-  --shadow-md: 0 4px 14px rgba(15, 30, 55, 0.08);
-  --shadow-lg: 0 12px 32px rgba(15, 30, 55, 0.12);
-  --shadow-hover: 0 8px 30px rgba(15, 30, 55, 0.08);
-  --shadow-soft: 0 2px 12px rgba(15, 30, 55, 0.04);
+  /* Ombres — aucune. Design plat. */
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-hover: none;
+  --shadow-soft: none;
 
   /* Typographie */
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Layout */
-  --header-height: 72px;
+  --header-height: 64px;
   --sidebar-width: 250px;
   --container-max: 1220px;
 }

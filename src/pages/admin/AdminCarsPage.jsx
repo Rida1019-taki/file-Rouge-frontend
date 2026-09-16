@@ -72,15 +72,7 @@ export default function AdminCarsPage() {
                 className="car-row"
               >
                 <div className="car-row__image">
-                  {image ? (
-                    <img src={image} alt="" />
-                  ) : (
-                    <div className="car-row__placeholder">
-                      <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                      </svg>
-                    </div>
-                  )}
+                  <img src={image} alt="" />
                 </div>
 
                 <div className="car-row__body">

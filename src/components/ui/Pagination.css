@@ -15,8 +15,6 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
-  transition: background-color 0.15s ease, color 0.15s ease,
-    opacity 0.15s ease;
 }
 
 .pagination__page:hover:not(.pagination__page--active),

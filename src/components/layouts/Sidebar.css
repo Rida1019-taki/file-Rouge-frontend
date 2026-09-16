@@ -10,12 +10,10 @@
   background: var(--surface);
   border-right: 1px solid var(--border);
   transform: translateX(-100%);
-  transition: transform 0.2s ease;
 }
 
 .sidebar--open {
   transform: translateX(0);
-  box-shadow: var(--shadow-lg);
 }
 
 .sidebar__brand {
@@ -74,7 +72,6 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--text-muted);
-  transition: color 0.15s ease, background-color 0.15s ease;
 }
 
 .sidebar__link svg {
