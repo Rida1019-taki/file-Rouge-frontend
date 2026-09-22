@@ -11,6 +11,7 @@ import RentalPage from './pages/RentalPage'
 import CarDetailPage from './pages/CarDetailPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ProfilePage from './pages/ProfilePage'
 import NotFoundPage from './pages/NotFoundPage'
 import MyReservationsPage from './pages/client/MyReservationsPage'
 import OwnerCarsPage from './pages/owner/OwnerCarsPage'
@@ -46,6 +47,12 @@ export default function App() {
         <Route path="/vente" element={<SalesPage />} />
         <Route path="/location" element={<RentalPage />} />
         <Route path="/voitures/:id" element={<CarDetailPage />} />
+      </Route>
+
+      <Route element={<ProtectedRoute />}>
+        <Route element={<DashboardLayout />}>
+          <Route path="/profil" element={<ProfilePage />} />
+        </Route>
       </Route>
 
       <Route element={<ProtectedRoute roles={[ROLES.CLIENT]} />}>

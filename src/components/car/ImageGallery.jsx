@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { FALLBACK_CAR_IMAGE_GALLERY } from '../../utils/carImage'
+import { FALLBACK_CAR_IMAGE_GALLERY, normalizeImages } from '../../utils/carImage'
 import './ImageGallery.css'
 
 const PlaceholderImage = () => (
@@ -11,7 +11,7 @@ const PlaceholderImage = () => (
 )
 
 export default function ImageGallery({ images = [] }) {
-  const list = images?.length ? images : []
+  const list = normalizeImages(images)
   const principalIndex = Math.max(
     0,
     list.findIndex((img) => img.principale)

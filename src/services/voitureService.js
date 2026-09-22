@@ -2,20 +2,20 @@ import api from '../api/axios'
 import { ENDPOINTS } from '../config/endpoints'
 
 const voitureService = {
-  getAll: async () => {
-    const response = await api.get(ENDPOINTS.voitures.list)
+  getAll: async (params = {}) => {
+    const response = await api.get(ENDPOINTS.voitures.list, { params })
     return response.data
   },
-  getByType: async (type) => {
-    const response = await api.get(ENDPOINTS.voitures.byType(type))
+  getByType: async (type, params = {}) => {
+    const response = await api.get(ENDPOINTS.voitures.byType(type), { params })
     return response.data
   },
   getById: async (id) => {
     const response = await api.get(ENDPOINTS.voitures.byId(id))
     return response.data
   },
-  getMine: async () => {
-    const response = await api.get(ENDPOINTS.voitures.mine)
+  getMine: async (params = {}) => {
+    const response = await api.get(ENDPOINTS.voitures.mine, { params })
     return response.data
   },
   create: async (data) => {

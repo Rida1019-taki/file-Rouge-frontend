@@ -1,16 +1,17 @@
 import { useState } from 'react'
 import reservationService from '../../services/reservationService'
-import useList from '../../hooks/useList'
+import usePaginatedList from '../../hooks/usePaginatedList'
 import ReservationCard from '../../components/reservation/ReservationCard'
 import Spinner from '../../components/ui/Spinner'
 import EmptyState from '../../components/ui/EmptyState'
+import Pagination from '../../components/ui/Pagination'
 import useToast from '../../hooks/useToast'
 import Toast from '../../components/ui/Toast'
 import { getErrorMessage } from '../../utils/helpers'
 import './owner-pages.css'
 
 export default function OwnerReservationsPage() {
-  const { data: reservations, loading, reload } = useList(reservationService.getOwner)
+  const { data: reservations, loading, reload, pagination, setPage } = usePaginatedList(reservationService.getOwner)
   const { toast, show, hide } = useToast()
   const [busy, setBusy] = useState({ id: null, action: null })
 
@@ -47,19 +48,26 @@ export default function OwnerReservationsPage() {
       {loading ? (
         <Spinner label="Chargement des réservations..." />
       ) : reservations?.length ? (
-        <div className="owner-list">
-          {reservations.map((reservation) => (
-            <ReservationCard
-              key={reservation.id}
-              reservation={reservation}
-              onConfirm={handleConfirm}
-              onRefuse={handleRefuse}
-              busyAction={
-                busy.id === reservation.id ? busy.action : null
-              }
-            />
-          ))}
-        </div>
+        <>
+          <div className="owner-list">
+            {reservations.map((reservation) => (
+              <ReservationCard
+                key={reservation.id}
+                reservation={reservation}
+                onConfirm={handleConfirm}
+                onRefuse={handleRefuse}
+                busyAction={
+                  busy.id === reservation.id ? busy.action : null
+                }
+              />
+            ))}
+          </div>
+          <Pagination
+            page={pagination.page + 1}
+            totalPages={pagination.totalPages}
+            onChange={(nextPage) => setPage(nextPage - 1)}
+          />
+        </>
       ) : (
         <EmptyState message="Aucune réservation reçue pour le moment." />
       )}

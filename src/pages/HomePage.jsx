@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import voitureService from '../services/voitureService'
-import useList from '../hooks/useList'
+import useFilteredCars from '../hooks/useFilteredCars'
 import CarList from '../components/car/CarList'
 import CarFilter from '../components/car/CarFilter'
 import SearchBar from '../components/common/SearchBar'
@@ -9,21 +8,27 @@ import CategorySection from '../components/common/CategorySection'
 import TrustSection from '../components/common/TrustSection'
 import Spinner from '../components/ui/Spinner'
 import EmptyState from '../components/ui/EmptyState'
+import Pagination from '../components/ui/Pagination'
 import { FALLBACK_CAR_IMAGE_GALLERY } from '../utils/carImage'
 import './HomePage.css'
 
 const HERO_CAR_IMAGE =
   'https://images.unsplash.com/photo-1609521263047-f8f205293f24?q=80&w=1600&auto=format&fit=crop'
 
-const normalize = (value) =>
-  String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-
-const EMPTY_FILTERS = { marque: '', categorieId: '', prixMax: '', transmission: '' }
-
 export default function HomePage() {
-  const { data: voitures, loading, error } = useList(voitureService.getAll)
-  const [filters, setFilters] = useState(EMPTY_FILTERS)
-  const [ville, setVille] = useState('')
+  const {
+    voitures,
+    totalPages,
+    page,
+    setPage,
+    filters,
+    ville,
+    loading,
+    error,
+    handleFiltersChange,
+    handleSearch,
+    clearVille
+  } = useFilteredCars()
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -37,30 +42,8 @@ export default function HomePage() {
     return () => window.clearTimeout(timer)
   }, [location.state, location.pathname, navigate])
 
-  const filtered = useMemo(() => {
-    return (voitures || []).filter((voiture) => {
-      const villeName = voiture.ville?.nom || voiture.ville || ''
-      if (ville && normalize(villeName) !== normalize(ville) && !normalize(villeName).includes(normalize(ville))) {
-        return false
-      }
-      if (filters.marque && !normalize(`${voiture.marque} ${voiture.modele}`).includes(normalize(filters.marque))) {
-        return false
-      }
-      if (filters.categorieId && String(voiture.categorieId || voiture.categorie?.id || voiture.categorie?.nom) !== String(filters.categorieId)) {
-        return false
-      }
-      if (filters.prixMax && Number(voiture.prixParJour || voiture.prixVente) > Number(filters.prixMax)) {
-        return false
-      }
-      if (filters.transmission && voiture.transmission !== filters.transmission) {
-        return false
-      }
-      return true
-    })
-  }, [voitures, filters, ville])
-
-  const handleSearch = (city) => {
-    setVille(city)
+  const searchAndScroll = (city) => {
+    handleSearch(city)
     document.getElementById('catalog')?.scrollIntoView()
   }
 
@@ -146,7 +129,7 @@ export default function HomePage() {
             {ville && (
               <button
                 type="button"
-                onClick={() => setVille('')}
+                onClick={clearVille}
                 className="catalog__chip"
               >
                 {ville} ✕
@@ -156,19 +139,26 @@ export default function HomePage() {
 
           <div className="grid-aside">
             <aside>
-              <CarFilter filters={filters} onChange={setFilters} />
+              <CarFilter filters={filters} onChange={handleFiltersChange} />
             </aside>
 
             <div>
               <div className="home-search">
-                <SearchBar onSearch={handleSearch} />
+                <SearchBar onSearch={searchAndScroll} />
               </div>
               {error ? (
                 <EmptyState message="Impossible de charger les voitures. Vérifiez que le backend est démarré." />
               ) : loading ? (
                 <Spinner label="Chargement des voitures..." />
               ) : (
-                <CarList voitures={filtered} />
+                <>
+                  <CarList voitures={voitures} />
+                  <Pagination
+                    page={page + 1}
+                    totalPages={totalPages}
+                    onChange={(nextPage) => setPage(nextPage - 1)}
+                  />
+                </>
               )}
             </div>
           </div>

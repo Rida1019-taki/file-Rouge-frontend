@@ -6,12 +6,12 @@ const reservationService = {
     const response = await api.post(ENDPOINTS.reservations.create, data)
     return response.data
   },
-  getMy: async () => {
-    const response = await api.get(ENDPOINTS.reservations.my)
+  getMy: async (params = {}) => {
+    const response = await api.get(ENDPOINTS.reservations.my, { params })
     return response.data
   },
-  getOwner: async () => {
-    const response = await api.get(ENDPOINTS.reservations.owner)
+  getOwner: async (params = {}) => {
+    const response = await api.get(ENDPOINTS.reservations.owner, { params })
     return response.data
   },
   updateStatus: async (id, statut) => {

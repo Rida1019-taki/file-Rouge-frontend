@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import categorieService from '../../services/categorieService'
 import villeService from '../../services/villeService'
 import voitureService from '../../services/voitureService'
+import { normalizeImages } from '../../utils/carImage'
 import { voitureSchema } from '../../schemas/voitureSchema'
 import Button from '../ui/Button'
 import Input from '../ui/Input'
@@ -64,7 +65,7 @@ export default function CarForm({ initialData, onSubmit, submitting = false }) {
   const { options: villes } = useOptions(villeService.getAll, 'ville')
   const [pendingFiles, setPendingFiles] = useState([])
   const [removedImageIds, setRemovedImageIds] = useState([])
-  const existingImages = initialData?.images || []
+  const existingImages = normalizeImages(initialData?.images)
 
   const defaultValues = useMemo(
     () => ({
@@ -265,16 +266,18 @@ export default function CarForm({ initialData, onSubmit, submitting = false }) {
             {existingImages
               .filter((img) => !removedImageIds.includes(img.id))
               .map((img) => (
-                <div key={img.id} className="image-cell">
+                <div key={img.id || img.url} className="image-cell">
                   <img src={img.url} alt="" />
-                  <button
-                    type="button"
-                    onClick={() => removeExistingImage(img.id)}
-                    className="image-cell__remove"
-                    aria-label="Supprimer cette photo"
-                  >
-                    ✕
-                  </button>
+                  {img.id && (
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(img.id)}
+                      className="image-cell__remove"
+                      aria-label="Supprimer cette photo"
+                    >
+                      ✕
+                    </button>
+                  )}
                 </div>
               ))}
             {pendingFiles.map((file, index) => (

@@ -1,22 +1,30 @@
 import { useCallback, useState } from 'react'
 import authService from '../services/authService'
-import { clearToken, getToken, setToken } from '../api/interceptor'
+import { clearToken, getToken, setToken, USER_KEY } from '../api/interceptor'
 import { AuthContext } from './contextSymbols'
-
-const USER_KEY = 'tomobilty_user'
 
 const readStoredUser = () => {
   try {
-    return JSON.parse(localStorage.getItem(USER_KEY)) || null
+    return JSON.parse(sessionStorage.getItem(USER_KEY)) || null
   } catch {
-    localStorage.removeItem(USER_KEY)
+    sessionStorage.removeItem(USER_KEY)
     return null
   }
 }
 
+const readStoredSession = () => {
+  const storedToken = getToken()
+  if (!storedToken) {
+    sessionStorage.removeItem(USER_KEY)
+    return { token: null, user: null }
+  }
+  return { token: storedToken, user: readStoredUser() }
+}
+
 export default function AuthProvider({ children }) {
-  const [user, setUser] = useState(readStoredUser)
-  const [token, setTokenState] = useState(() => getToken())
+  const [initialSession] = useState(readStoredSession)
+  const [user, setUser] = useState(initialSession.user)
+  const [token, setTokenState] = useState(initialSession.token)
   const [loading] = useState(false)
 
   const storeSession = useCallback((session) => {
@@ -28,7 +36,7 @@ export default function AuthProvider({ children }) {
       setTokenState(nextToken)
     }
     if (nextUser) {
-      localStorage.setItem(USER_KEY, JSON.stringify(nextUser))
+      sessionStorage.setItem(USER_KEY, JSON.stringify(nextUser))
       setUser(nextUser)
     }
   }, [])
@@ -53,9 +61,15 @@ export default function AuthProvider({ children }) {
 
   const logout = useCallback(() => {
     clearToken()
-    localStorage.removeItem(USER_KEY)
+    sessionStorage.removeItem(USER_KEY)
     setTokenState(null)
     setUser(null)
+  }, [])
+
+  const updateUser = useCallback((nextUser) => {
+    if (!nextUser) return
+    sessionStorage.setItem(USER_KEY, JSON.stringify(nextUser))
+    setUser(nextUser)
   }, [])
 
   const value = {
@@ -64,7 +78,8 @@ export default function AuthProvider({ children }) {
     loading,
     login,
     register,
-    logout
+    logout,
+    updateUser
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

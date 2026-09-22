@@ -7,6 +7,7 @@ export default function Sidebar({ open = false, onNavigate }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const isAdmin = user?.role === ROLES.ADMIN
+  const isOwner = user?.role === ROLES.OWNER
 
   const linkClass = ({ isActive }) =>
     `sidebar__link${isActive ? ' sidebar__link--active' : ''}`
@@ -51,7 +52,7 @@ export default function Sidebar({ open = false, onNavigate }) {
               Gestion des utilisateurs
             </NavLink>
           </>
-        ) : (
+        ) : isOwner ? (
           <>
             <NavLink to="/owner" className={linkClass} end onClick={close}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -72,7 +73,35 @@ export default function Sidebar({ open = false, onNavigate }) {
               Réservations
             </NavLink>
           </>
+        ) : (
+          <>
+            <NavLink to="/client/mes-reservations" className={linkClass} onClick={close}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Mes réservations
+            </NavLink>
+            <NavLink to="/vente" className={linkClass} onClick={close}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              Vente
+            </NavLink>
+            <NavLink to="/location" className={linkClass} onClick={close}>
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+              Location
+            </NavLink>
+          </>
         )}
+
+        <NavLink to="/profil" className={linkClass} onClick={close}>
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          Mon profil
+        </NavLink>
 
         <Link to="/" className="sidebar__link sidebar__link--back" onClick={close}>
           <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">

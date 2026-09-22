@@ -12,8 +12,14 @@ export default function ReservationCard({
   onRefuse,
   busyAction = null
 }) {
-  const voiture = reservation.voiture || {}
+  const voiture = {
+    id: reservation.voitureId,
+    marque: reservation.voitureMarque,
+    modele: reservation.voitureModele,
+    images: reservation.voitureImages
+  }
   const image = getCarImage(voiture)
+  const isAchat = reservation.type === 'ACHAT'
   const canCancel =
     onCancel && reservation.statut === 'EN_ATTENTE'
   const canDecide =
@@ -35,12 +41,18 @@ export default function ReservationCard({
           </h3>
           <StatusBadge statut={reservation.statut} />
         </div>
-        <p className="res-card__dates">
-          <span>Du {formatDate(reservation.dateDebut)}</span>
-          <span>au {formatDate(reservation.dateFin)}</span>
-        </p>
+        {isAchat ? (
+          <p className="res-card__dates res-card__dates--achat">
+            Demande d'achat
+          </p>
+        ) : (
+          <p className="res-card__dates">
+            <span>Du {formatDate(reservation.dateDebut)}</span>
+            <span>au {formatDate(reservation.dateFin)}</span>
+          </p>
+        )}
         <p className="res-card__client">
-          Client : {reservation.client?.prenom} {reservation.client?.nom}
+          Client : {reservation.clientPrenom} {reservation.clientNom}
         </p>
         <p className="res-card__amount">
           {formatMontant(reservation.montantTotal)}

@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import api from '../../api/axios'
+import userService from '../../services/userService'
+import usePaginatedList from '../../hooks/usePaginatedList'
 import Spinner from '../../components/ui/Spinner'
 import EmptyState from '../../components/ui/EmptyState'
+import Pagination from '../../components/ui/Pagination'
 import Toast from '../../components/ui/Toast'
 import useToast from '../../hooks/useToast'
 import { ROLES, ROLE_LABELS } from '../../config/roles'
@@ -14,57 +17,38 @@ const ROLE_TABS = [
   { value: ROLES.ADMIN, label: 'Administrateurs' }
 ]
 
+const normalize = (value) =>
+  (value || '')
+    .toString()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+
 export default function UserManagement() {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const { data: users, loading, error, reload, pagination, setPage } = usePaginatedList(userService.getAll)
   const [roleTab, setRoleTab] = useState('')
+  const [search, setSearch] = useState('')
   const { toast, show, hide } = useToast()
 
-  useEffect(() => {
-    let cancelled = false
-    const fetchUsers = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        const response = await api.get('/users')
-        if (!cancelled && Array.isArray(response.data)) {
-          setUsers(response.data)
-        } else if (!cancelled) {
-          setUsers([])
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err)
-          setUsers([])
-        }
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-    fetchUsers()
-    return () => {
-      cancelled = true
-    }
-  }, [])
-
-  const reload = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      const response = await api.get('/users')
-      setUsers(Array.isArray(response.data) ? response.data : [])
-    } catch (err) {
-      setError(err)
-      setUsers([])
-    } finally {
-      setLoading(false)
-    }
+  const handleRoleChange = (value) => {
+    setRoleTab(value)
+    setPage(0)
   }
 
-  const filtered = roleTab
-    ? users.filter((u) => u.role === roleTab)
-    : users
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value)
+    setPage(0)
+  }
+
+  const query = search.trim()
+  const filtered = (users || []).filter((user) => {
+    if (roleTab && user.role !== roleTab) return false
+    if (!query) return true
+    const haystack = normalize(
+      `${user.prenom || ''} ${user.nom || ''} ${user.email || ''} ${user.telephone || ''}`
+    )
+    return haystack.includes(normalize(query))
+  })
 
   const handleDelete = async (user) => {
     const label = `${user.prenom || ''} ${user.nom || ''}`.trim() || user.email
@@ -100,68 +84,100 @@ export default function UserManagement() {
         <h1 className="page-title">Gestion des utilisateurs</h1>
       </div>
 
-      <div className="tabs">
-        {ROLE_TABS.map((t) => (
-          <button
-            key={t.value}
-            type="button"
-            onClick={() => setRoleTab(t.value)}
-            className={`tab-btn${roleTab === t.value ? ' tab-btn--active' : ''}`}
+      <div className="um-toolbar">
+        <div className="tabs">
+          {ROLE_TABS.map((t) => (
+            <button
+              key={t.value}
+              type="button"
+              onClick={() => handleRoleChange(t.value)}
+              className={`tab-btn${roleTab === t.value ? ' tab-btn--active' : ''}`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="um-search">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            className="um-search__icon"
+            aria-hidden="true"
           >
-            {t.label}
-          </button>
-        ))}
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Rechercher un utilisateur..."
+            className="form-control um-search__input"
+            aria-label="Rechercher un utilisateur"
+          />
+        </div>
       </div>
 
       {loading ? (
         <Spinner label="Chargement des utilisateurs..." />
       ) : filtered.length ? (
-        <div className="um-table-wrap">
-          <table className="um-table">
-            <thead>
-              <tr>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Rôle</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filtered.map((user) => (
-                <tr key={user.id}>
-                  <td className="um-table__name">
-                    {user.prenom || user.nom
-                      ? `${user.prenom || ''} ${user.nom || ''}`.trim()
-                      : '—'}
-                  </td>
-                  <td>{user.email || '—'}</td>
-                  <td>{user.telephone || '—'}</td>
-                  <td>
-                    <span className={`badge ${
-                      user.role === ROLES.ADMIN
-                        ? 'badge--admin'
-                        : user.role === ROLES.OWNER
-                          ? 'badge--owner'
-                          : 'badge--client'
-                    }`}>
-                      {ROLE_LABELS[user.role] || user.role}
-                    </span>
-                  </td>
-                  <td className="um-table__actions">
-                    <button
-                      type="button"
-                      className="btn btn--danger btn--sm"
-                      onClick={() => handleDelete(user)}
-                    >
-                      Supprimer
-                    </button>
-                  </td>
+        <>
+          <div className="um-table-wrap">
+            <table className="um-table">
+              <thead>
+                <tr>
+                  <th>Nom</th>
+                  <th>Email</th>
+                  <th>Téléphone</th>
+                  <th>Rôle</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {filtered.map((user) => (
+                  <tr key={user.id}>
+                    <td className="um-table__name">
+                      {user.prenom || user.nom
+                        ? `${user.prenom || ''} ${user.nom || ''}`.trim()
+                        : '—'}
+                    </td>
+                    <td>{user.email || '—'}</td>
+                    <td>{user.telephone || '—'}</td>
+                    <td>
+                      <span className={`badge ${
+                        user.role === ROLES.ADMIN
+                          ? 'badge--admin'
+                          : user.role === ROLES.OWNER
+                            ? 'badge--owner'
+                            : 'badge--client'
+                      }`}>
+                        {ROLE_LABELS[user.role] || user.role}
+                      </span>
+                    </td>
+                    <td className="um-table__actions">
+                      <button
+                        type="button"
+                        className="btn btn--danger btn--sm"
+                        onClick={() => handleDelete(user)}
+                      >
+                        Supprimer
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Pagination
+            page={pagination.page + 1}
+            totalPages={pagination.totalPages}
+            onChange={(nextPage) => setPage(nextPage - 1)}
+          />
+        </>
       ) : (
         <EmptyState message="Aucun utilisateur ne correspond à ce filtre." />
       )}

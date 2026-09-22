@@ -69,6 +69,11 @@ export default function Navbar() {
               Mes réservations
             </NavLink>
           )}
+          {user && (
+            <NavLink to="/profil" className={linkClass}>
+              Mon profil
+            </NavLink>
+          )}
         </div>
 
         <div className="navbar__actions">
@@ -163,6 +168,11 @@ export default function Navbar() {
           {user && user.role === ROLES.CLIENT && (
             <NavLink to="/client/mes-reservations" className={linkClass} onClick={close}>
               Mes réservations
+            </NavLink>
+          )}
+          {user && (
+            <NavLink to="/profil" className={linkClass} onClick={close}>
+              Mon profil
             </NavLink>
           )}
 

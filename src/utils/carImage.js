@@ -26,11 +26,36 @@ export function pickCarFallback(seed) {
   return FALLBACK_IMAGES[hashCode(key) % FALLBACK_IMAGES.length]
 }
 
+export function getImageUrl(image) {
+  if (!image) return ''
+  if (typeof image === 'string') return image
+  return image.url || image.imageUrl || image.chemin || ''
+}
+
+export function normalizeImages(images) {
+  if (!Array.isArray(images)) return []
+  return images
+    .map((image, index) => {
+      const url = getImageUrl(image)
+      if (!url) return null
+      if (typeof image === 'string') {
+        return { id: null, url, principale: index === 0 }
+      }
+      return {
+        id: image.id ?? null,
+        url,
+        principale: Boolean(image.principale ?? image.isPrincipale),
+        alt: image.alt
+      }
+    })
+    .filter(Boolean)
+}
+
 export function getCarImage(voiture) {
-  const images = voiture?.images || []
-  const principale = images.find((img) => img.principale)
-  if (principale?.url || images[0]?.url) {
-    return principale?.url || images[0].url
+  const images = normalizeImages(voiture?.images)
+  const principale = images.find((img) => img.principale) || images[0]
+  if (principale?.url) {
+    return principale.url
   }
   const seed = `${voiture?.id || ''}${voiture?.marque || ''}${voiture?.modele || ''}`
   return pickCarFallback(seed)

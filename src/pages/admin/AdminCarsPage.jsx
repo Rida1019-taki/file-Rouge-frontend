@@ -1,9 +1,10 @@
 import { useMemo, useState } from 'react'
 import voitureService from '../../services/voitureService'
-import useList from '../../hooks/useList'
+import usePaginatedList from '../../hooks/usePaginatedList'
 import Button from '../../components/ui/Button'
 import Spinner from '../../components/ui/Spinner'
 import EmptyState from '../../components/ui/EmptyState'
+import Pagination from '../../components/ui/Pagination'
 import StatusBadge from '../../components/reservation/StatusBadge'
 import ListingBadge from '../../components/car/ListingBadge'
 import { formatPrix, formatMontant } from '../../utils/format'
@@ -19,9 +20,14 @@ const TABS = [
 ]
 
 export default function AdminCarsPage() {
-  const { data: voitures, loading, reload } = useList(voitureService.getAll)
+  const { data: voitures, loading, reload, pagination, setPage } = usePaginatedList(voitureService.getAll)
   const { toast, show, hide } = useToast()
   const [tab, setTab] = useState('')
+
+  const handleTabChange = (value) => {
+    setTab(value)
+    setPage(0)
+  }
 
   const filtered = useMemo(
     () => (tab ? (voitures || []).filter((v) => v.listingType === tab) : voitures || []),
@@ -50,7 +56,7 @@ export default function AdminCarsPage() {
           <button
             key={t.value}
             type="button"
-            onClick={() => setTab(t.value)}
+            onClick={() => handleTabChange(t.value)}
             className={`tab-btn${tab === t.value ? ' tab-btn--active' : ''}`}
           >
             {t.label}
@@ -61,8 +67,9 @@ export default function AdminCarsPage() {
       {loading ? (
         <Spinner label="Chargement des voitures..." />
       ) : filtered.length ? (
-        <div className="car-rows">
-          {filtered.map((voiture) => {
+        <>
+          <div className="car-rows">
+            {filtered.map((voiture) => {
             const image = getCarImage(voiture)
             const isSale = voiture.listingType === 'SALE'
             const price = isSale ? formatMontant(voiture.prixVente) : formatPrix(voiture.prixParJour)
@@ -98,8 +105,14 @@ export default function AdminCarsPage() {
                 </div>
               </div>
             )
-          })}
-        </div>
+            })}
+          </div>
+          <Pagination
+            page={pagination.page + 1}
+            totalPages={pagination.totalPages}
+            onChange={(nextPage) => setPage(nextPage - 1)}
+          />
+        </>
       ) : (
         <EmptyState message="Aucune voiture ne correspond à ce filtre." />
       )}

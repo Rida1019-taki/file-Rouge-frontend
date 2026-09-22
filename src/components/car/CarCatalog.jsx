@@ -1,17 +1,12 @@
-import { useMemo, useState } from 'react'
-import voitureService from '../../services/voitureService'
-import useList from '../../hooks/useList'
+import { useMemo } from 'react'
+import useFilteredCars from '../../hooks/useFilteredCars'
 import CarList from './CarList'
 import CarFilter from './CarFilter'
 import SearchBar from '../common/SearchBar'
 import Spinner from '../ui/Spinner'
 import EmptyState from '../ui/EmptyState'
+import Pagination from '../ui/Pagination'
 import './CarCatalog.css'
-
-const normalize = (value) =>
-  String(value || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-
-const EMPTY_FILTERS = { marque: '', categorieId: '', prixMax: '', transmission: '' }
 
 export default function CarCatalog({
   listingType,
@@ -20,40 +15,27 @@ export default function CarCatalog({
   eyebrow,
   priceLabel = 'Prix max (DH)'
 }) {
-  const fetchFn = useMemo(
-    () => (listingType ? () => voitureService.getByType(listingType) : () => voitureService.getAll()),
-    [listingType]
+  const {
+    voitures,
+    totalPages,
+    page,
+    setPage,
+    filters,
+    ville,
+    loading,
+    error,
+    handleFiltersChange,
+    handleSearch,
+    clearVille
+  } = useFilteredCars({ listingType })
+
+  const onSearch = useMemo(
+    () => (city) => {
+      handleSearch(city)
+      document.getElementById('catalog')?.scrollIntoView()
+    },
+    [handleSearch]
   )
-  const { data: voitures, loading, error } = useList(fetchFn)
-  const [filters, setFilters] = useState(EMPTY_FILTERS)
-  const [ville, setVille] = useState('')
-
-  const filtered = useMemo(() => {
-    return (voitures || []).filter((voiture) => {
-      const villeName = voiture.ville?.nom || voiture.ville || ''
-      if (ville && normalize(villeName) !== normalize(ville) && !normalize(villeName).includes(normalize(ville))) {
-        return false
-      }
-      if (filters.marque && !normalize(`${voiture.marque} ${voiture.modele}`).includes(normalize(filters.marque))) {
-        return false
-      }
-      if (filters.categorieId && String(voiture.categorieId || voiture.categorie?.id || voiture.categorie?.nom) !== String(filters.categorieId)) {
-        return false
-      }
-      if (filters.prixMax && Number(voiture.prixParJour || voiture.prixVente) > Number(filters.prixMax)) {
-        return false
-      }
-      if (filters.transmission && voiture.transmission !== filters.transmission) {
-        return false
-      }
-      return true
-    })
-  }, [voitures, filters, ville])
-
-  const handleSearch = (city) => {
-    setVille(city)
-    document.getElementById('catalog')?.scrollIntoView()
-  }
 
   return (
     <>
@@ -63,7 +45,7 @@ export default function CarCatalog({
           <h1 className="catalog-hero__title">{title}</h1>
           <p className="catalog-hero__subtitle">{subtitle}</p>
           <div className="catalog-hero__search">
-            <SearchBar onSearch={handleSearch} />
+            <SearchBar onSearch={onSearch} />
           </div>
         </div>
       </section>
@@ -75,7 +57,7 @@ export default function CarCatalog({
             {ville && (
               <button
                 type="button"
-                onClick={() => setVille('')}
+                onClick={clearVille}
                 className="catalog__chip"
               >
                 {ville} ✕
@@ -85,7 +67,7 @@ export default function CarCatalog({
 
           <div className="grid-aside">
             <aside>
-              <CarFilter filters={filters} onChange={setFilters} priceLabel={priceLabel} />
+              <CarFilter filters={filters} onChange={handleFiltersChange} priceLabel={priceLabel} />
             </aside>
 
             <div>
@@ -94,7 +76,14 @@ export default function CarCatalog({
               ) : loading ? (
                 <Spinner label="Chargement des voitures..." />
               ) : (
-                <CarList voitures={filtered} />
+                <>
+                  <CarList voitures={voitures} />
+                  <Pagination
+                    page={page + 1}
+                    totalPages={totalPages}
+                    onChange={(nextPage) => setPage(nextPage - 1)}
+                  />
+                </>
               )}
             </div>
           </div>

@@ -11,6 +11,7 @@ import Button from '../ui/Button'
 import './ReservationForm.css'
 
 export default function ReservationForm({ voiture }) {
+  const isSale = voiture.listingType === 'SALE'
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
@@ -25,6 +26,7 @@ export default function ReservationForm({ voiture }) {
     resolver: yupResolver(reservationSchema),
     defaultValues: {
       voitureId: voiture.id,
+      type: isSale ? 'ACHAT' : 'LOCATION',
       dateDebut: '',
       dateFin: ''
     }
@@ -32,7 +34,9 @@ export default function ReservationForm({ voiture }) {
 
   const dateDebut = watch('dateDebut')
   const dateFin = watch('dateFin')
-  const montant = calcMontant(voiture.prixParJour, dateDebut, dateFin)
+  const montant = isSale
+    ? Number(voiture.prixVente ?? 0)
+    : calcMontant(voiture.prixParJour, dateDebut, dateFin)
 
   const toDate = (val) => (val ? new Date(val) : null)
 
@@ -41,11 +45,21 @@ export default function ReservationForm({ voiture }) {
     setError(null)
     setSuccess(false)
     try {
-      await reservationService.create(data)
+      const payload = { voitureId: data.voitureId, type: data.type }
+      if (data.type !== 'ACHAT') {
+        payload.dateDebut = data.dateDebut
+        payload.dateFin = data.dateFin
+      }
+      await reservationService.create(payload)
       setSuccess(true)
-      reset({ voitureId: voiture.id, dateDebut: '', dateFin: '' })
+      reset({
+        voitureId: voiture.id,
+        type: isSale ? 'ACHAT' : 'LOCATION',
+        dateDebut: '',
+        dateFin: ''
+      })
     } catch (err) {
-      setError(getErrorMessage(err, "Impossible de créer la réservation"))
+      setError(getErrorMessage(err, 'Impossible de créer la réservation'))
     } finally {
       setSubmitting(false)
     }
@@ -54,13 +68,17 @@ export default function ReservationForm({ voiture }) {
   if (success) {
     return (
       <div className="res-success">
-        <p>Réservation envoyée !</p>
-        <p className="res-success__text">Le propriétaire va confirmer votre demande. Suivez-la dans « Mes réservations ».</p>
+        <p>{isSale ? 'Demande d\'achat envoyée !' : 'Réservation envoyée !'}</p>
+        <p className="res-success__text">
+          {isSale
+            ? 'Le vendeur va confirmer votre demande. Suivez-la dans « Mes réservations ».'
+            : 'Le propriétaire va confirmer votre demande. Suivez-la dans « Mes réservations ».'}
+        </p>
         <Button
           variant="outline"
           onClick={() => setSuccess(false)}
         >
-          Nouvelle réservation
+          Nouvelle demande
         </Button>
       </div>
     )
@@ -72,57 +90,70 @@ export default function ReservationForm({ voiture }) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} noValidate>
       <div className="res-form">
-        <div className="form-field">
-          <label className="form-label">Date de début</label>
-          <Controller
-            name="dateDebut"
-            control={control}
-            render={({ field }) => (
-              <DatePicker
-                selected={toDate(field.value)}
-                onChange={(date) => field.onChange(date ? date.toISOString() : '')}
-                dateFormat="dd/MM/yyyy"
-                minDate={new Date()}
-                placeholderText="Choisir une date"
-                className={datePickerClass(errors.dateDebut)}
+        {isSale ? (
+          <div className="res-summary">
+            <span className="res-summary__label">Prix de vente</span>
+            <span className="res-summary__value">{formatMontant(voiture.prixVente)}</span>
+          </div>
+        ) : (
+          <>
+            <div className="form-field">
+              <label className="form-label">Date de début</label>
+              <Controller
+                name="dateDebut"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    selected={toDate(field.value)}
+                    onChange={(date) => field.onChange(date ? date.toISOString() : '')}
+                    dateFormat="dd/MM/yyyy"
+                    minDate={new Date()}
+                    placeholderText="Choisir une date"
+                    className={datePickerClass(errors.dateDebut)}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.dateDebut && (
-            <p className="form-error">{errors.dateDebut.message}</p>
-          )}
-        </div>
+              {errors.dateDebut && (
+                <p className="form-error">{errors.dateDebut.message}</p>
+              )}
+            </div>
 
-        <div className="form-field">
-          <label className="form-label">Date de fin</label>
-          <Controller
-            name="dateFin"
-            control={control}
-            render={({ field }) => (
-              <DatePicker
-                selected={toDate(field.value)}
-                onChange={(date) => field.onChange(date ? date.toISOString() : '')}
-                dateFormat="dd/MM/yyyy"
-                minDate={toDate(dateDebut) || new Date()}
-                placeholderText="Choisir une date"
-                className={datePickerClass(errors.dateFin)}
+            <div className="form-field">
+              <label className="form-label">Date de fin</label>
+              <Controller
+                name="dateFin"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    selected={toDate(field.value)}
+                    onChange={(date) => field.onChange(date ? date.toISOString() : '')}
+                    dateFormat="dd/MM/yyyy"
+                    minDate={toDate(dateDebut) || new Date()}
+                    placeholderText="Choisir une date"
+                    className={datePickerClass(errors.dateFin)}
+                  />
+                )}
               />
-            )}
-          />
-          {errors.dateFin && (
-            <p className="form-error">{errors.dateFin.message}</p>
-          )}
-        </div>
+              {errors.dateFin && (
+                <p className="form-error">{errors.dateFin.message}</p>
+              )}
+            </div>
 
-        <div className="res-summary">
-          <span className="res-summary__label">Montant estimé</span>
-          <span className="res-summary__value">{formatMontant(montant)}</span>
-        </div>
+            <div className="res-summary">
+              <span className="res-summary__label">Montant estimé</span>
+              <span className="res-summary__value">{formatMontant(montant)}</span>
+            </div>
+          </>
+        )}
 
         {error && <p className="res-form__error">{error}</p>}
 
         <Button type="submit" className="btn--block" loading={submitting}>
-          {submitting ? 'Envoi...' : 'Réserver cette voiture'}
+          {submitting
+            ? 'Envoi...'
+            : isSale
+              ? 'Réserver l\'achat'
+              : 'Réserver cette voiture'}
         </Button>
       </div>
     </form>
