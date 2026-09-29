@@ -13,7 +13,7 @@ import { getErrorMessage } from '../../utils/helpers'
 import './client-pages.css'
 
 export default function MyReservationsPage() {
-  const { data: reservations, loading, reload, pagination, setPage } = usePaginatedList(reservationService.getMy)
+  const { data: reservations, loading, error, reload, pagination, setPage } = usePaginatedList(reservationService.getMy)
   const { toast, show, hide } = useToast()
   const goToSection = useHomeNavigation()
   const [busyId, setBusyId] = useState(null)
@@ -31,13 +31,38 @@ export default function MyReservationsPage() {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="reservations-page">
+        <h1 className="page-title">Mes réservations</h1>
+        <Spinner label="Chargement de vos réservations..." />
+        <Toast toast={toast} onClose={hide} />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="reservations-page">
+        <h1 className="page-title">Mes réservations</h1>
+        <div className="form-alert-error" style={{ padding: '2rem', textAlign: 'center' }}>
+          <p style={{ color: '#dc2626', marginBottom: '1rem' }}>
+            Erreur: {getErrorMessage(error, 'Impossible de charger les réservations')}
+          </p>
+          <Button variant="outline" onClick={reload}>
+            Réessayer
+          </Button>
+        </div>
+        <Toast toast={toast} onClose={hide} />
+      </div>
+    )
+  }
+
   return (
     <div className="reservations-page">
       <h1 className="page-title">Mes réservations</h1>
 
-      {loading ? (
-        <Spinner label="Chargement de vos réservations..." />
-      ) : reservations?.length ? (
+      {reservations?.length ? (
         <>
           <div className="reservations-page__list">
             {reservations.map((reservation) => (

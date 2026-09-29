@@ -1,10 +1,10 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
 import { ROLES } from '../../config/roles'
 import './Sidebar.css'
 
 export default function Sidebar({ open = false, onNavigate }) {
-  const { user, logout } = useAuth()
+  const userStr = localStorage.getItem('user')
+  const user = userStr ? JSON.parse(userStr) : null
   const navigate = useNavigate()
   const isAdmin = user?.role === ROLES.ADMIN
   const isOwner = user?.role === ROLES.OWNER
@@ -13,7 +13,9 @@ export default function Sidebar({ open = false, onNavigate }) {
     `sidebar__link${isActive ? ' sidebar__link--active' : ''}`
 
   const handleLogout = () => {
-    logout()
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('user')
     navigate('/')
   }
 
@@ -68,7 +70,7 @@ export default function Sidebar({ open = false, onNavigate }) {
             </NavLink>
             <NavLink to="/owner/reservations" className={linkClass} onClick={close}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002 2z" />
               </svg>
               Réservations
             </NavLink>
@@ -77,7 +79,7 @@ export default function Sidebar({ open = false, onNavigate }) {
           <>
             <NavLink to="/client/mes-reservations" className={linkClass} onClick={close}>
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 002 2z" />
               </svg>
               Mes réservations
             </NavLink>

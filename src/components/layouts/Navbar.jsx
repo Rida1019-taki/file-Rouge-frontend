@@ -1,18 +1,20 @@
 import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
 import useHomeNavigation from '../../hooks/useHomeNavigation'
 import { ROLES } from '../../config/roles'
 import './Navbar.css'
 
 export default function Navbar() {
-  const { user, logout } = useAuth()
+  const userStr = localStorage.getItem('user')
+  const user = userStr ? JSON.parse(userStr) : null
   const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const goToSection = useHomeNavigation()
 
   const handleLogout = () => {
-    logout()
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('user')
     navigate('/')
   }
 

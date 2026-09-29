@@ -1,5 +1,4 @@
-const TOKEN_KEY = 'tomobilty_token'
-export const USER_KEY = 'tomobilty_user'
+const TOKEN_KEY = 'token'
 
 const decodeJwtPayload = (token) => {
   try {
@@ -27,19 +26,24 @@ export const isTokenValid = (token) => {
 }
 
 export const getToken = () => {
-  const token = sessionStorage.getItem(TOKEN_KEY)
+  const token = localStorage.getItem(TOKEN_KEY)
   if (!token) return null
   if (!isTokenValid(token)) {
-    sessionStorage.removeItem(TOKEN_KEY)
-    sessionStorage.removeItem(USER_KEY)
+    localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem('role')
+    localStorage.removeItem('user')
     return null
   }
   return token
 }
 
-export const setToken = (token) => sessionStorage.setItem(TOKEN_KEY, token)
+export const setToken = (token) => localStorage.setItem(TOKEN_KEY, token)
 
-export const clearToken = () => sessionStorage.removeItem(TOKEN_KEY)
+export const clearToken = () => {
+  localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem('role')
+  localStorage.removeItem('user')
+}
 
 export function attachTokenInterceptor(api) {
   api.interceptors.request.use((config) => {
@@ -55,12 +59,11 @@ export function handleUnauthorized(api) {
   api.interceptors.response.use(
     (response) => response,
     (error) => {
+      // Only handle 401 (unauthenticated), NOT 403 (forbidden)
+      // 403 means authenticated but not authorized - don't log out
       if (error.response?.status === 401) {
         clearToken()
-        sessionStorage.removeItem(USER_KEY)
-        if (window.location.pathname !== '/login') {
-          window.location.href = '/login'
-        }
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'))
       }
       return Promise.reject(error)
     }

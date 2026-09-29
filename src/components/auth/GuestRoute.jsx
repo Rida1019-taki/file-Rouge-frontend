@@ -1,24 +1,18 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
-import Spinner from '../ui/Spinner'
-import { ROLES } from '../../config/roles'
-import './auth.css'
 
 export default function GuestRoute() {
-  const { user, loading } = useAuth()
+  const token = localStorage.getItem('token')
+  const role = localStorage.getItem('role')
 
-  if (loading) {
-    return (
-      <div className="auth-loader">
-        <Spinner label="Chargement..." />
-      </div>
-    )
+  if (!token) {
+    return <Outlet />
   }
 
-  if (user) {
-    const home = { [ROLES.ADMIN]: '/admin', [ROLES.OWNER]: '/owner', [ROLES.CLIENT]: '/' }
-    return <Navigate to={home[user.role] || '/'} replace />
+  const home = {
+    ADMIN: '/admin',
+    OWNER: '/owner',
+    CLIENT: '/'
   }
 
-  return <Outlet />
+  return <Navigate to={home[role] || '/'} replace />
 }

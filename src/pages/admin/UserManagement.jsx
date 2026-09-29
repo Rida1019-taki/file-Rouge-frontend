@@ -54,7 +54,7 @@ export default function UserManagement() {
     const label = `${user.prenom || ''} ${user.nom || ''}`.trim() || user.email
     if (!window.confirm(`Supprimer ${label} ? Cette action est irréversible.`)) return
     try {
-      await api.delete(`/admin/users/${user.id}`)
+      await userService.delete(user.id)
       show('Utilisateur supprimé')
       await reload()
     } catch {
