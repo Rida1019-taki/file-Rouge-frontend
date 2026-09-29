@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import useFetch from '../../hooks/useFetch'
 import api from '../../api/axios'
 import StatsCard from '../../components/common/StatsCard'
@@ -5,10 +6,12 @@ import Spinner from '../../components/ui/Spinner'
 import './admin-pages.css'
 
 export default function AdminDashboardPage() {
-  const { data: stats, loading, error } = useFetch(async () => {
+  const fetchStats = useCallback(async () => {
     const response = await api.get('/admin/stats')
     return response.data
-  })
+  }, [])
+
+  const { data: stats, loading, error } = useFetch(fetchStats)
 
   if (loading) {
     return (

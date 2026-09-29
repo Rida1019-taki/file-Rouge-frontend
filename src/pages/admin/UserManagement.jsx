@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import api from '../../api/axios'
 import userService from '../../services/userService'
 import usePaginatedList from '../../hooks/usePaginatedList'
 import Spinner from '../../components/ui/Spinner'
