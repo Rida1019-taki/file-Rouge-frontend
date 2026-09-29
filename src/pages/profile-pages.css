@@ -1,0 +1,15 @@
+.profile-page {
+  padding-top: 48px;
+  padding-bottom: 72px;
+}
+
+.profile-page__title {
+  margin-bottom: 24px;
+}
+
+.profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}

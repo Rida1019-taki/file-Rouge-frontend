@@ -1,16 +1,37 @@
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-import useAuth from '../hooks/useAuth'
+import authService from '../services/authService'
+import userService from '../services/userService'
 import { authSchema } from '../schemas/authSchema'
 import { ROLES, ROLE_LABELS } from '../config/roles'
 import { getErrorMessage } from '../utils/helpers'
+import { setToken, setRole, setUser } from '../utils/auth'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
+import './auth-pages.css'
+
+const extractRoleFromToken = (token) => {
+  if (!token) return null
+  try {
+    const payload = token.split('.')[1]
+    if (!payload) return null
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+    const json = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((char) => '%' + ('00' + char.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    )
+    const parsed = JSON.parse(json)
+    return parsed.role || parsed.authorities?.[0]?.replace('ROLE_', '') || null
+  } catch {
+    return null
+  }
+}
 
 export default function RegisterPage() {
-  const { register: registerUser } = useAuth()
   const navigate = useNavigate()
 
   const {
@@ -25,7 +46,32 @@ export default function RegisterPage() {
 
   const onSubmit = async (data) => {
     try {
-      await registerUser(data)
+      const session = await authService.register(data)
+      const token = session?.token || session?.accessToken
+      const user = session?.user || session
+
+      if (token) setToken(token)
+      
+      let role = user?.role
+      if (!role && token) {
+        role = extractRoleFromToken(token)
+      }
+      if (role) setRole(role)
+
+      // If user from response doesn't have id, fetch full profile
+      if (user) {
+        if (!user.id && token) {
+          try {
+            const fullUser = await userService.getProfile()
+            setUser(fullUser)
+          } catch {
+            setUser(user)
+          }
+        } else {
+          setUser(user)
+        }
+      }
+
       navigate('/')
     } catch (err) {
       alert(getErrorMessage(err, "Erreur lors de l'inscription"))
@@ -33,26 +79,24 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
-      <Card className="w-full max-w-md">
-        <div className="mb-6 text-center">
-          <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary-600 text-xl font-bold text-white">
-            T
-          </span>
-          <h1 className="mt-4 text-2xl font-bold text-gray-900">Créer un compte</h1>
-          <p className="mt-1 text-sm text-gray-500">
+    <div className="auth-page">
+      <Card className="auth-card">
+        <div className="auth-head">
+          <span className="auth-logo">T</span>
+          <h1 className="auth-title">Créer un compte</h1>
+          <p className="auth-sub">
             Rejoignez Tomobilty.ma en quelques secondes
           </p>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
-          <div className="mb-4">
-            <label className="mb-2 block text-sm font-medium text-gray-700">Je suis</label>
+          <div className="form-field">
+            <label className="form-label">Je suis</label>
             <Controller
               name="role"
               control={control}
               render={({ field }) => (
-                <div className="flex gap-3">
+                <div className="role-select">
                   {[ROLES.CLIENT, ROLES.OWNER].map((role) => {
                     const active = field.value === role
                     return (
@@ -60,11 +104,7 @@ export default function RegisterPage() {
                         key={role}
                         type="button"
                         onClick={() => field.onChange(role)}
-                        className={`flex-1 rounded-lg border-2 px-4 py-3 text-center text-sm font-medium transition ${
-                          active
-                            ? 'border-primary-600 bg-primary-50 text-primary-700'
-                            : 'border-gray-300 bg-white text-gray-500 hover:border-primary-300'
-                        }`}
+                        className={`role-btn ${active ? 'role-btn--active' : ''}`}
                       >
                         {ROLE_LABELS[role]}
                       </button>
@@ -75,7 +115,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="grid gap-x-5 md:grid-cols-2">
+          <div className="form-grid">
             <Input label="Nom" name="nom" register={register} error={errors.nom} />
             <Input label="Prénom" name="prenom" register={register} error={errors.prenom} />
           </div>
@@ -83,14 +123,14 @@ export default function RegisterPage() {
           <Input label="Email" name="email" type="email" register={register} error={errors.email} />
           <Input label="Mot de passe" name="password" type="password" register={register} error={errors.password} placeholder="6 caractères minimum" />
 
-          <Button type="submit" className="mt-2 w-full">
+          <Button type="submit" className="auth-submit">
             Créer mon compte
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="auth-footer">
           Déjà inscrit ?{' '}
-          <a href="/login" className="font-semibold text-primary-600 hover:underline">
+          <a href="/login">
             Se connecter
           </a>
         </p>

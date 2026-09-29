@@ -25,10 +25,16 @@ export const ENDPOINTS = {
     create: '/villes'
   },
   images: {
-    add: (voitureId) => `/voitures/${voitureId}/images`,
+    add: (voitureId) => `/images/voiture/${voitureId}`,
+    upload: (voitureId) => `/voitures/${voitureId}/images`,
     byId: (id) => `/images/${id}`
   },
   admin: {
-    stats: '/admin/stats'
+    stats: '/admin/stats',
+    users: '/admin/users'
+  },
+  users: {
+    list: '/users',
+    byId: (id) => `/users/${id}`
   }
 }

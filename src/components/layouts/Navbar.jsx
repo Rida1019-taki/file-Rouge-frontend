@@ -1,66 +1,93 @@
+import { useState } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import useAuth from '../../hooks/useAuth'
+import useHomeNavigation from '../../hooks/useHomeNavigation'
+import { ROLES } from '../../config/roles'
+import './Navbar.css'
 
 export default function Navbar() {
-  const { user, logout } = useAuth()
+  const userStr = localStorage.getItem('user')
+  const user = userStr ? JSON.parse(userStr) : null
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
+  const goToSection = useHomeNavigation()
 
   const handleLogout = () => {
-    logout()
+    localStorage.removeItem('token')
+    localStorage.removeItem('role')
+    localStorage.removeItem('user')
     navigate('/')
   }
 
+  const close = () => setOpen(false)
+
   const linkClass = ({ isActive }) =>
-    `px-3 py-2 text-sm font-medium rounded-lg transition ${
-      isActive ? 'text-primary-600 bg-primary-50' : 'text-gray-700 hover:text-primary-600 hover:bg-gray-100'
-    }`
+    `navbar__link${isActive ? ' navbar__link--active' : ''}`
 
   return (
-    <header className="sticky top-0 z-40 border-b border-gray-200 bg-white/90 backdrop-blur">
-      <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-lg font-bold text-white">
-            T
-          </span>
-          <span className="text-xl font-bold text-gray-900">
-            Tomo<span className="text-primary-600">bility</span>
-            <span className="text-primary-600">.ma</span>
-          </span>
+    <header className="navbar">
+      <nav className="navbar__nav container">
+        <Link
+          to="/"
+          className="navbar__brand"
+          onClick={() => {
+            close()
+            window.scrollTo({ top: 0 })
+          }}
+        >
+          <span className="navbar__name">Tomobility</span>
         </Link>
 
-        <div className="hidden items-center gap-1 md:flex">
-          <NavLink to="/" className={linkClass} end>
+        <div className="navbar__links">
+          <NavLink
+            to="/"
+            className={linkClass}
+            end
+            onClick={() => window.scrollTo({ top: 0 })}
+          >
             Accueil
           </NavLink>
           <NavLink to="/vente" className={linkClass}>
-            Vendre
+            Acheter
           </NavLink>
           <NavLink to="/location" className={linkClass}>
             Louer
           </NavLink>
-          <a href="/#a-propos" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg transition">
+          <button
+            type="button"
+            className="navbar__link"
+            onClick={() => goToSection('a-propos')}
+          >
             À propos
-          </a>
-          <a href="/#contact" className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-primary-600 rounded-lg transition">
+          </button>
+          <button
+            type="button"
+            className="navbar__link"
+            onClick={() => goToSection('contact')}
+          >
             Contact
-          </a>
-          {user && user.role === 'CLIENT' && (
+          </button>
+          {user && user.role === ROLES.CLIENT && (
             <NavLink to="/client/mes-reservations" className={linkClass}>
               Mes réservations
             </NavLink>
           )}
+          {user && (
+            <NavLink to="/profil" className={linkClass}>
+              Mon profil
+            </NavLink>
+          )}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="navbar__actions">
           {user ? (
             <>
-              <span className="hidden text-sm font-medium text-gray-600 sm:block">
-                Salut, {user.prenom || user.nom || user.email}
+              <span className="navbar__greeting">
+                {user.prenom || user.nom || user.email}
               </span>
               {user.role !== 'CLIENT' && (
                 <Link
                   to={user.role === 'ADMIN' ? '/admin' : '/owner'}
-                  className="rounded-lg bg-gray-900 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-800 transition"
+                  className="btn btn--primary btn--sm"
                 >
                   Tableau de bord
                 </Link>
@@ -68,9 +95,9 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                className="btn btn--outline btn--sm"
               >
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
                 Déconnexion
@@ -78,22 +105,115 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link
-                to="/login"
-                className="rounded-lg px-3 py-2 text-sm font-semibold text-gray-700 transition hover:text-primary-600"
-              >
+              <Link to="/login" className="btn btn--ghost btn--sm">
                 Connexion
               </Link>
-              <Link
-                to="/register"
-                className="rounded-lg bg-primary-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-primary-700"
-              >
+              <Link to="/register" className="btn btn--primary btn--sm">
                 S'inscrire
               </Link>
             </>
           )}
         </div>
+
+        <button
+          type="button"
+          className={`navbar__toggle${open ? ' navbar__toggle--open' : ''}`}
+          onClick={() => setOpen((v) => !v)}
+          aria-label="Menu"
+          aria-expanded={open}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </nav>
+
+      {open && (
+        <div className="navbar__mobile">
+          <NavLink
+            to="/"
+            className={linkClass}
+            end
+            onClick={() => {
+              close()
+              window.scrollTo({ top: 0 })
+            }}
+          >
+            Accueil
+          </NavLink>
+          <NavLink to="/vente" className={linkClass} onClick={close}>
+            Acheter
+          </NavLink>
+          <NavLink to="/location" className={linkClass} onClick={close}>
+            Louer
+          </NavLink>
+          <button
+            type="button"
+            className="navbar__link"
+            onClick={() => {
+              close()
+              goToSection('a-propos')
+            }}
+          >
+            À propos
+          </button>
+          <button
+            type="button"
+            className="navbar__link"
+            onClick={() => {
+              close()
+              goToSection('contact')
+            }}
+          >
+            Contact
+          </button>
+          {user && user.role === ROLES.CLIENT && (
+            <NavLink to="/client/mes-reservations" className={linkClass} onClick={close}>
+              Mes réservations
+            </NavLink>
+          )}
+          {user && (
+            <NavLink to="/profil" className={linkClass} onClick={close}>
+              Mon profil
+            </NavLink>
+          )}
+
+          <div className="navbar__mobile-actions">
+            {user ? (
+              <>
+                {user.role !== 'CLIENT' && (
+                  <Link
+                    to={user.role === 'ADMIN' ? '/admin' : '/owner'}
+                    className="btn btn--primary btn--block"
+                    onClick={close}
+                  >
+                    Tableau de bord
+                  </Link>
+                )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    close()
+                    handleLogout()
+                  }}
+                  className="btn btn--outline btn--block"
+                >
+                  Déconnexion
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="btn btn--outline btn--block" onClick={close}>
+                  Connexion
+                </Link>
+                <Link to="/register" className="btn btn--primary btn--block" onClick={close}>
+                  S'inscrire
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   )
 }

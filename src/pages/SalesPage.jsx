@@ -4,8 +4,9 @@ export default function SalesPage() {
   return (
     <CarCatalog
       listingType="SALE"
-      title="Achetez votre prochaine voiture au Maroc"
-      subtitle="Trouvez votre prochaine voiture parmi les véhicules disponibles à la vente."
+      eyebrow="Vente"
+      title="Voitures à vendre"
+      subtitle="Découvrez des véhicules disponibles à l'achat."
       priceLabel="Prix max (DH)"
     />
   )

@@ -1,0 +1,22 @@
+.card {
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.card__header {
+  margin-bottom: 16px;
+}
+
+.card__title {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.card__subtitle {
+  margin-top: 2px;
+  font-size: 13px;
+  color: var(--text-muted);
+}

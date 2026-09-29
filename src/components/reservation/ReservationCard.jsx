@@ -3,6 +3,7 @@ import { formatDate, formatMontant } from '../../utils/format'
 import StatusBadge from './StatusBadge'
 import Button from '../ui/Button'
 import { getCarImage } from '../../utils/carImage'
+import './ReservationCard.css'
 
 export default function ReservationCard({
   reservation,
@@ -11,50 +12,54 @@ export default function ReservationCard({
   onRefuse,
   busyAction = null
 }) {
-  const voiture = reservation.voiture || {}
+  const voiture = {
+    id: reservation.voitureId,
+    marque: reservation.voitureMarque,
+    modele: reservation.voitureModele,
+    images: reservation.voitureImages
+  }
   const image = getCarImage(voiture)
+  const isAchat = reservation.type === 'ACHAT'
   const canCancel =
     onCancel && reservation.statut === 'EN_ATTENTE'
   const canDecide =
     onConfirm && onRefuse && reservation.statut === 'EN_ATTENTE'
 
   return (
-    <div className="flex flex-col gap-4 rounded-xl bg-white p-4 shadow-sm ring-1 ring-gray-200 sm:flex-row sm:items-center">
+    <div className="res-card">
       <Link
         to={voiture.id ? `/voitures/${voiture.id}` : '#'}
-        className="h-24 w-full shrink-0 overflow-hidden rounded-lg bg-gray-100 sm:w-40"
+        className="res-card__image"
       >
-        {image ? (
-          <img src={image} alt="Voiture" className="h-full w-full object-cover" />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-gray-100 text-gray-300">
-            <svg className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-            </svg>
-          </div>
-        )}
+        <img src={image} alt="Voiture" />
       </Link>
 
-      <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <h3 className="font-semibold text-gray-900">
+      <div className="res-card__body">
+        <div className="res-card__title-row">
+          <h3 className="res-card__title">
             {voiture.marque} {voiture.modele || ''}
           </h3>
           <StatusBadge statut={reservation.statut} />
         </div>
-        <p className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-500">
-          <span>Du {formatDate(reservation.dateDebut)}</span>
-          <span>au {formatDate(reservation.dateFin)}</span>
+        {isAchat ? (
+          <p className="res-card__dates res-card__dates--achat">
+            Demande d'achat
+          </p>
+        ) : (
+          <p className="res-card__dates">
+            <span>Du {formatDate(reservation.dateDebut)}</span>
+            <span>au {formatDate(reservation.dateFin)}</span>
+          </p>
+        )}
+        <p className="res-card__client">
+          Client : {reservation.clientPrenom} {reservation.clientNom}
         </p>
-        <p className="mt-0.5 text-sm text-gray-500">
-          Client : {reservation.client?.prenom} {reservation.client?.nom}
-        </p>
-        <p className="mt-2 text-base font-bold text-primary-600">
+        <p className="res-card__amount">
           {formatMontant(reservation.montantTotal)}
         </p>
       </div>
 
-      <div className="flex shrink-0 flex-wrap gap-2 sm:flex-col">
+      <div className="res-card__actions">
         {canCancel && (
           <Button
             variant="danger"

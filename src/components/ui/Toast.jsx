@@ -1,7 +1,9 @@
+import './Toast.css'
+
 const STYLES = {
-  success: 'bg-green-600',
-  error: 'bg-red-600',
-  info: 'bg-blue-600'
+  success: 'toast--success',
+  error: 'toast--error',
+  info: 'toast--info'
 }
 
 export default function Toast({ toast, onClose }) {
@@ -10,14 +12,14 @@ export default function Toast({ toast, onClose }) {
   const style = STYLES[toast.type] || STYLES.success
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-4 z-[60] flex justify-center px-4">
-      <div className={`pointer-events-auto flex items-center gap-3 rounded-lg ${style} px-4 py-3 text-sm font-medium text-white shadow-lg`}>
+    <div className="toast-wrap">
+      <div className={`toast ${style}`}>
         {toast.type === 'error' ? (
-          <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="toast__icon">
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         ) : (
-          <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="toast__icon">
             <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         )}
@@ -25,10 +27,10 @@ export default function Toast({ toast, onClose }) {
         <button
           type="button"
           onClick={onClose}
-          className="ml-2 rounded p-0.5 hover:bg-white/20"
+          className="toast__close"
           aria-label="Fermer"
         >
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>

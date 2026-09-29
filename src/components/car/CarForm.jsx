@@ -3,39 +3,69 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import categorieService from '../../services/categorieService'
 import villeService from '../../services/villeService'
+import voitureService from '../../services/voitureService'
+import { normalizeImages } from '../../utils/carImage'
 import { voitureSchema } from '../../schemas/voitureSchema'
 import Button from '../ui/Button'
 import Input from '../ui/Input'
 import Select from '../ui/Select'
 import Spinner from '../ui/Spinner'
+import './CarForm.css'
 
-function useOptions(fetchFn) {
+const fromVoitures = (voitures, kind) => {
+  const seen = new Map()
+  for (const voiture of voitures || []) {
+    const isVille = kind === 'ville'
+    const id = isVille ? voiture.villeId ?? voiture.ville?.id : voiture.categorieId ?? voiture.categorie?.id
+    const nom = isVille ? voiture.ville?.nom || voiture.ville : voiture.categorie?.nom || voiture.categorie
+    if (id != null && nom && !seen.has(Number(id))) {
+      seen.set(Number(id), { id: Number(id), nom })
+    }
+  }
+  return [...seen.values()].sort((a, b) => a.id - b.id)
+}
+
+function useOptions(fetchFn, kind) {
   const [options, setOptions] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     let mounted = true
-    fetchFn()
-      .then((list) => {
+    const load = async () => {
+      try {
+        const list = await fetchFn()
         if (mounted) {
           setOptions((list || []).map((item) => ({ value: item.id, label: item.nom || item.libelle })))
         }
-      })
-      .catch(() => {})
-      .finally(() => {
+      } catch {
+        try {
+          const voitures = await voitureService.getAll()
+          const derived = fromVoitures(voitures, kind)
+          if (mounted) {
+            setOptions(derived.map((item) => ({ value: item.id, label: item.nom })))
+          }
+        } catch {
+          if (mounted) setOptions([])
+        }
+      } finally {
         if (mounted) setLoading(false)
-      })
+      }
+    }
+    load()
     return () => {
       mounted = false
     }
-  }, [fetchFn])
+  }, [fetchFn, kind])
 
   return { options, loading }
 }
 
 export default function CarForm({ initialData, onSubmit, submitting = false }) {
-  const { options: categories } = useOptions(categorieService.getAll)
-  const { options: villes } = useOptions(villeService.getAll)
+  const { options: categories } = useOptions(categorieService.getAll, 'categorie')
+  const { options: villes } = useOptions(villeService.getAll, 'ville')
+  const [pendingFiles, setPendingFiles] = useState([])
+  const [removedImageIds, setRemovedImageIds] = useState([])
+  const existingImages = normalizeImages(initialData?.images)
 
   const defaultValues = useMemo(
     () => ({
@@ -73,44 +103,91 @@ export default function CarForm({ initialData, onSubmit, submitting = false }) {
     reset(defaultValues)
   }, [reset, defaultValues])
 
+  const handleFiles = (event) => {
+    const chosen = Array.from(event.target.files || [])
+    setPendingFiles((prev) => [
+      ...prev,
+      ...chosen.map((file) => Object.assign(file, { preview: URL.createObjectURL(file) }))
+    ])
+    event.target.value = ''
+  }
+
+  const removePendingFile = (index) => {
+    setPendingFiles((prev) => {
+      URL.revokeObjectURL(prev[index]?.preview)
+      return prev.filter((_, i) => i !== index)
+    })
+  }
+
+  const removeExistingImage = (imageId) => {
+    setRemovedImageIds((prev) => [...prev, imageId])
+  }
+
+  const submitForm = handleSubmit((values) =>
+    onSubmit({ ...values, _files: pendingFiles, _removedImageIds: removedImageIds })
+  )
+
   if (!categories.length && !villes.length) {
     return <Spinner label="Chargement du formulaire..." />
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
-      <div className="mb-5">
-        <label className="mb-2 block text-sm font-medium text-gray-700">Type d'annonce</label>
-        <div className="grid gap-3 sm:grid-cols-2">
+    <form onSubmit={submitForm} noValidate>
+      <div className="form-field">
+        <label className="form-label">Type d'annonce</label>
+        <div className="announce-type">
           <label
-            className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition ${
-              isSale ? 'border-amber-500 bg-amber-50' : 'border-gray-300 bg-white hover:bg-gray-50'
-            }`}
+            className={`announce-type__option${isSale ? ' announce-type__option--sale' : ''}`}
           >
-            <input type="radio" value="SALE" {...register('listingType')} className="h-4 w-4 text-amber-600" />
-            <span className="text-sm font-semibold text-gray-900">Vente</span>
-            <span className="text-xs text-gray-500">Prix de vente fixe</span>
+            <input type="radio" value="SALE" {...register('listingType')} />
+            <span className="announce-type__meta">
+              <span className="announce-type__name">Vente</span>
+              <span className="announce-type__hint">Prix de vente fixe</span>
+            </span>
           </label>
           <label
-            className={`flex cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 transition ${
-              !isSale ? 'border-primary-500 bg-primary-50' : 'border-gray-300 bg-white hover:bg-gray-50'
-            }`}
+            className={`announce-type__option${!isSale ? ' announce-type__option--rental' : ''}`}
           >
-            <input type="radio" value="RENTAL" {...register('listingType')} className="h-4 w-4 text-primary-600" />
-            <span className="text-sm font-semibold text-gray-900">Location</span>
-            <span className="text-xs text-gray-500">Prix par jour</span>
+            <input type="radio" value="RENTAL" {...register('listingType')} />
+            <span className="announce-type__meta">
+              <span className="announce-type__name">Location</span>
+              <span className="announce-type__hint">Prix par jour</span>
+            </span>
           </label>
         </div>
       </div>
 
-      <div className="grid gap-x-5 md:grid-cols-2">
+      <div className="form-grid">
         <Input label="Marque" name="marque" register={register} error={errors.marque} placeholder="Ex : Renault" />
         <Input label="Modèle" name="modele" register={register} error={errors.modele} placeholder="Ex : Clio" />
-        <Input label="Année" name="annee" type="number" register={register} error={errors.annee} />
+        <Input
+          label="Année"
+          name="annee"
+          type="number"
+          register={register}
+          registerOptions={{ valueAsNumber: true }}
+          error={errors.annee}
+        />
         {isSale ? (
-          <Input label="Prix de vente (DH)" name="prixVente" type="number" step="0.01" register={register} error={errors.prixVente} />
+          <Input
+            label="Prix de vente (DH)"
+            name="prixVente"
+            type="number"
+            step="0.01"
+            register={register}
+            registerOptions={{ valueAsNumber: true }}
+            error={errors.prixVente}
+          />
         ) : (
-          <Input label="Prix par jour (DH)" name="prixParJour" type="number" step="0.01" register={register} error={errors.prixParJour} />
+          <Input
+            label="Prix par jour (DH)"
+            name="prixParJour"
+            type="number"
+            step="0.01"
+            register={register}
+            registerOptions={{ valueAsNumber: true }}
+            error={errors.prixParJour}
+          />
         )}
 
         <Select
@@ -151,11 +228,18 @@ export default function CarForm({ initialData, onSubmit, submitting = false }) {
           ]}
           placeholder="Non précisé"
         />
-        <Input label="Nombre de places" name="places" type="number" register={register} error={errors.places} />
+        <Input
+          label="Nombre de places"
+          name="places"
+          type="number"
+          register={register}
+          registerOptions={{ valueAsNumber: true }}
+          error={errors.places}
+        />
       </div>
 
-      <div className="mb-4">
-        <label htmlFor="description" className="mb-1 block text-sm font-medium text-gray-700">
+      <div className="form-field">
+        <label htmlFor="description" className="form-label">
           Description
         </label>
         <textarea
@@ -163,15 +247,57 @@ export default function CarForm({ initialData, onSubmit, submitting = false }) {
           name="description"
           rows="3"
           {...register('description')}
-          className={`w-full rounded-lg border bg-white px-3 py-2 text-sm outline-none transition focus:ring-2 ${
-            errors.description
-              ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-              : 'border-gray-300 focus:border-primary-600 focus:ring-primary-100'
-          } min-h-20`}
+          className={`form-control ${errors.description ? 'form-control--error' : ''}`}
         />
+        {errors.description && (
+          <p className="form-error">{errors.description.message}</p>
+        )}
       </div>
 
-      <div className="mt-6 flex justify-end gap-3">
+      <div className="form-field">
+        <span className="form-label">Photos de la voiture</span>
+        <label className="form-control form-control--file">
+          <span>Choisir des photos</span>
+          <input type="file" accept="image/*" multiple onChange={handleFiles} />
+        </label>
+        {(existingImages.filter((img) => !removedImageIds.includes(img.id)).length > 0 ||
+          pendingFiles.length > 0) && (
+          <div className="image-grid">
+            {existingImages
+              .filter((img) => !removedImageIds.includes(img.id))
+              .map((img) => (
+                <div key={img.id || img.url} className="image-cell">
+                  <img src={img.url} alt="" />
+                  {img.id && (
+                    <button
+                      type="button"
+                      onClick={() => removeExistingImage(img.id)}
+                      className="image-cell__remove"
+                      aria-label="Supprimer cette photo"
+                    >
+                      ✕
+                    </button>
+                  )}
+                </div>
+              ))}
+            {pendingFiles.map((file, index) => (
+              <div key={`${file.name}-${index}`} className="image-cell">
+                <img src={file.preview} alt="" />
+                <button
+                  type="button"
+                  onClick={() => removePendingFile(index)}
+                  className="image-cell__remove"
+                  aria-label="Retirer cette photo"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="form-actions">
         <Button type="submit" loading={submitting}>
           {initialData ? 'Mettre à jour' : 'Créer la voiture'}
         </Button>

@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import voitureService from '../services/voitureService'
 import useFetch from '../hooks/useFetch'
@@ -5,14 +6,16 @@ import CarDetail from '../components/car/CarDetail'
 import Spinner from '../components/ui/Spinner'
 import EmptyState from '../components/ui/EmptyState'
 import Button from '../components/ui/Button'
+import './CarDetailPage.css'
 
 export default function CarDetailPage() {
   const { id } = useParams()
-  const { data: voiture, loading, error } = useFetch(() => voitureService.getById(id))
+  const fetchVoiture = useCallback(() => voitureService.getById(id), [id])
+  const { data: voiture, loading, error } = useFetch(fetchVoiture)
 
   if (loading) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <div className="detail-page container">
         <Spinner label="Chargement de la voiture..." />
       </div>
     )
@@ -20,7 +23,7 @@ export default function CarDetailPage() {
 
   if (error || !voiture) {
     return (
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6">
+      <div className="detail-page container">
         <EmptyState message="Cette voiture est introuvable ou n'est plus disponible.">
           <Link to="/">
             <Button>Retour à l'accueil</Button>
@@ -31,7 +34,7 @@ export default function CarDetailPage() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+    <div className="detail-page container">
       <CarDetail voiture={voiture} />
     </div>
   )

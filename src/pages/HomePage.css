@@ -1,0 +1,241 @@
+.home-hero {
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  padding: 72px 0 88px;
+}
+
+@media (min-width: 768px) {
+  .home-hero {
+    padding: 112px 0 128px;
+  }
+}
+
+.home-hero__inner {
+  display: grid;
+  gap: 48px;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .home-hero__inner {
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+}
+
+.home-hero__label {
+  display: inline-block;
+  margin-bottom: 20px;
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-hero__title {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 800;
+  line-height: 1.02;
+  color: var(--text);
+  letter-spacing: -0.04em;
+}
+
+.home-hero__subtitle {
+  margin-top: 24px;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  max-width: 480px;
+}
+
+.home-hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.btn--hero-primary {
+  background: var(--text);
+  color: #ffffff;
+  border-color: var(--text);
+}
+
+.btn--hero-primary:hover {
+  background: #000000;
+  border-color: #000000;
+}
+
+.btn--hero-outline {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn--hero-outline:hover {
+  background: var(--surface-muted);
+  border-color: var(--text);
+}
+
+.home-hero__media {
+  display: none;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--surface-muted);
+}
+
+@media (min-width: 768px) {
+  .home-hero__media {
+    display: block;
+  }
+}
+
+.home-hero__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-services {
+  padding: 80px 0 72px;
+  border-bottom: 1px solid var(--border);
+}
+
+.home-services__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+@media (min-width: 768px) {
+  .home-services__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.service-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 40px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.service-panel__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+.service-panel__icon--sale {
+  color: var(--text);
+}
+
+.service-panel__icon--rental {
+  color: var(--text);
+}
+
+.service-panel__title {
+  margin-top: 20px;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.service-panel__desc {
+  margin-top: 8px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.service-panel .btn {
+  margin-top: 24px;
+}
+
+.service-panel__btn--sale {
+  background: var(--text);
+  color: #ffffff;
+  border-color: var(--text);
+}
+
+.service-panel__btn--sale:hover {
+  background: #000000;
+  border-color: #000000;
+}
+
+.service-panel__btn--rental {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.service-panel__btn--rental:hover {
+  background: var(--surface-muted);
+  border-color: var(--text);
+}
+
+.home-search {
+  margin-bottom: 20px;
+}
+
+.home-section {
+  padding: 72px 0;
+}
+
+.home-section--white {
+  background: var(--surface);
+}
+
+.home-section__title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
+  color: var(--text);
+}
+
+@media (min-width: 640px) {
+  .home-section__title {
+    font-size: 34px;
+  }
+}
+
+.home-section__text {
+  max-width: 720px;
+  margin: 16px auto 0;
+  font-size: 16px;
+  line-height: 1.7;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.home-contact__items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 32px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.home-contact__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.home-contact__item svg {
+  color: var(--text);
+}

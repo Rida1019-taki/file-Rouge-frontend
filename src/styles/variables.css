@@ -1,0 +1,54 @@
+:root {
+
+  --primary: #0f172a;
+  --primary-dark: #000000;
+  --primary-soft: #f1f5f9;
+
+  --accent: #0f172a;
+  --accent-dark: #000000;
+  --accent-soft: #f8fafc;
+
+  --background: #ffffff;
+  --surface: #ffffff;
+  --surface-muted: #f8fafc;
+  --filter-bg: #fafafa;
+
+  --hero-bg: #0f172a;
+  --footer-bg: #0f172a;
+
+  --text: #111827;
+  --text-muted: #6b7280;
+  --text-faint: #9ca3af;
+  --text-on-dark: #cbd5e1;
+
+  --border: #e5e7eb;
+  --border-strong: #9ca3af;
+
+  --success: #15803d;
+  --success-bg: #f0fdf4;
+  --danger: #b91c1c;
+  --danger-bg: #fef2f2;
+  --warning: #b45309;
+  --warning-bg: #fffbeb;
+
+  --sale: #0f172a;
+  --sale-bg: #f8fafc;
+  --rental: #0f172a;
+  --rental-bg: #f8fafc;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-hover: none;
+  --shadow-soft: none;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --header-height: 64px;
+  --sidebar-width: 250px;
+  --container-max: 1220px;
+}

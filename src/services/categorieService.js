@@ -3,8 +3,13 @@ import { ENDPOINTS } from '../config/endpoints'
 
 const categorieService = {
   getAll: async () => {
-    const response = await api.get(ENDPOINTS.categories.list)
-    return response.data
+    try {
+      const response = await api.get(ENDPOINTS.categories.list)
+      return response.data
+    } catch (err) {
+      if (err.response?.status === 403 || err.response?.status === 401) return []
+      throw err
+    }
   },
   create: async (data) => {
     const response = await api.post(ENDPOINTS.categories.create, data)

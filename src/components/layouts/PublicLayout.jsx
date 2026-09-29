@@ -1,24 +1,54 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import Navbar from './Navbar'
+import useHomeNavigation from '../../hooks/useHomeNavigation'
+import './PublicLayout.css'
 
 export default function PublicLayout() {
+  const goToSection = useHomeNavigation()
+
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className="public-layout">
       <Navbar />
-      <main className="flex-1">
+      <main className="public-layout__main">
         <Outlet />
       </main>
-      <footer className="border-t border-gray-200 bg-white py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-4 text-center sm:px-6">
-          <span className="text-lg font-bold text-gray-900">
-            Tomo<span className="text-primary-600">bility</span>.ma
-          </span>
-          <p className="text-sm text-gray-500">
-            Achat et location de voitures partout au Maroc — Casablanca, Rabat,
-            Marrakech, Tanger et plus.
-          </p>
-          <p className="text-xs text-gray-400">
-            © {new Date().getFullYear()} Tomobilty.ma. Tous droits réservés.
+      <footer className="site-footer">
+        <div className="container site-footer__grid">
+          <div className="site-footer__brand-col">
+            <span className="site-footer__brand">
+              Tomo<span>bility.ma</span>
+            </span>
+            <p className="site-footer__tagline">
+              Achat et location de voitures partout au Maroc.
+            </p>
+          </div>
+          <nav className="site-footer__nav" aria-label="Navigation pied de page">
+            <span className="site-footer__nav-title">Navigation</span>
+            <Link to="/vente" className="site-footer__link">
+              Vente
+            </Link>
+            <Link to="/location" className="site-footer__link">
+              Location
+            </Link>
+            <button
+              type="button"
+              className="site-footer__link"
+              onClick={() => goToSection('a-propos')}
+            >
+              À propos
+            </button>
+            <button
+              type="button"
+              className="site-footer__link"
+              onClick={() => goToSection('contact')}
+            >
+              Contact
+            </button>
+          </nav>
+        </div>
+        <div className="container site-footer__bottom">
+          <p className="site-footer__copy">
+            © 2026 Tomobilty.ma. Tous droits réservés.
           </p>
         </div>
       </footer>
