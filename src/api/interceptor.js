@@ -59,8 +59,6 @@ export function handleUnauthorized(api) {
   api.interceptors.response.use(
     (response) => response,
     (error) => {
-      // Only handle 401 (unauthenticated), NOT 403 (forbidden)
-      // 403 means authenticated but not authorized - don't log out
       if (error.response?.status === 401) {
         clearToken()
         window.dispatchEvent(new CustomEvent('auth:unauthorized'))
